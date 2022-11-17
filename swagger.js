@@ -7,8 +7,8 @@ const doc = {
       "Accesses a database for each user to their inventory of media",
   },
   // host: "localhost:8080",
-  host: "cse341-group-project.onrender.com",
-  schemes: ["https"],
+  host: "",
+  schemes: ["https", "http"],
 };
 
 const outputFile = "swagger-output.json";
