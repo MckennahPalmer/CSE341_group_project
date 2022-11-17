@@ -2,9 +2,9 @@ const swaggerAutogen = require("swagger-autogen")();
 
 const doc = {
   info: {
-    title: "Pun API",
+    title: "Media Catalog",
     description:
-      "It access a database full of jokes, puns, and one liners using this API with its written GET and POST routes.",
+      "Accesses a database for each user to their inventory of media",
   },
   host: "localhost:8080",
   schemes: ["http"],
