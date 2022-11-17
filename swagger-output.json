@@ -5,10 +5,10 @@
     "description": "Accesses a database for each user to their inventory of media",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "cse341-group-project.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/puns/": {
