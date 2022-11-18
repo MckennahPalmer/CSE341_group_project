@@ -13,7 +13,7 @@ app
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
   })
-  .use('/puns', require('./routes/puns'))
+  .use('/books', require('./routes/books'))
   //.use('/users', require('./routes/users')) //new line
   .use('/', require('./routes/index'))
   .listen(port, function (err) {

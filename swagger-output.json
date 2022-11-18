@@ -5,18 +5,44 @@
     "description": "Accesses a database for each user to their inventory of media",
     "version": "1.0.0"
   },
-  "host": "cse341-group-project.onrender.com",
+  "host": "",
   "basePath": "/",
-  "schemes": ["https", "http"],
+  "schemes": [
+    "https",
+    "http"
+  ],
   "paths": {
-    "/puns/": {
+    "/books/": {
       "get": {
-        "description": "Get all Puns",
-        "produces": ["application/json"],
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/books/{id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
