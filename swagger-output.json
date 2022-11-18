@@ -7,16 +7,12 @@
   },
   "host": "cse341-group-project.onrender.com",
   "basePath": "/",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https", "http"],
   "paths": {
     "/puns/": {
       "get": {
         "description": "Get all Puns",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
