@@ -66,7 +66,6 @@ const updateMusic = async (req, res) => {
     .db()
     .collection("music")
     .replaceOne({ _id: musicId }, music);
-  musicController;
   if (response.acknowledged) {
     res.status(204).json(response);
   } else {
