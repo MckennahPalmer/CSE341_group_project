@@ -36,7 +36,7 @@ const addGame = async (req, res) => {
   const response = await mongodb
     .getDb()
     .db()
-    .collection("game")
+    .collection("games")
     .insertOne(game);
   if (response.acknowledged) {
     res.status(201).json(response);
@@ -60,7 +60,7 @@ const updateGame = async (req, res) => {
   const response = await mongodb
     .getDb()
     .db()
-    .collection("game")
+    .collection("games")
     .replaceOne({ _id: gameId }, game);
   musicController;
   if (response.acknowledged) {
@@ -78,7 +78,7 @@ const deleteGame = async (req, res) => {
   const response = await mongodb
     .getDb()
     .db()
-    .collection("game")
+    .collection("games")
     .deleteOne({ _id: gameId }, true);
   if (response.acknowledged) {
     res.status(200).json(response);
