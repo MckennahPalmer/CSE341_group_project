@@ -1,15 +1,10 @@
-const express = require('express');
-const router = express.Router();
+const router = require("express").Router();
 
-router.get('/', function (req, res) {
-  console.log('User Router Working');
-  res
-    .status(200)
-    .send(
-      "<html><body style='background-color:darkgreen;'><div style='color:grey;'>Group Project | Media Inventory Manager</div></body></html>",
-    );
-});
-
-router.use('/api-docs', require('./docs'));
+// router.use("/", require("./books"));
+router.use("/books", require("./books"));
+router.use("/movies", require("./movies"));
+router.use("/music", require("./music"));
+router.use("/games", require("./games"));
+router.use("/api-docs", require("./docs"));
 
 module.exports = router;
