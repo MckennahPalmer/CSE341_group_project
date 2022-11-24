@@ -7,7 +7,7 @@ const doc = {
       "An app that will allow you to story different types of media and allow you to view your inventory.",
   },
   host: "",
-  schemes: ["http", "https"],
+  schemes: ["https", "http"],
 };
 
 const outputFile = "swagger-output.json";
