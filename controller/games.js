@@ -2,7 +2,7 @@ const mongodb = require("../db/connect");
 const ObjectId = require("mongodb").ObjectId;
 
 const getAllGames = async (req, res) => {
-  // console.log("Getting all music");
+  // console.log("Getting all games");
   const result = await mongodb.getDb().db().collection("games").find();
   result.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
@@ -11,7 +11,7 @@ const getAllGames = async (req, res) => {
 };
 
 const getGameById = async (req, res) => {
-  // console.log("Getting music by ID");
+  // console.log("Getting games by ID");
   const gameId = new ObjectId(req.params.id);
   const result = await mongodb
     .getDb()
@@ -25,7 +25,7 @@ const getGameById = async (req, res) => {
 };
 
 const addGame = async (req, res) => {
-  // console.log("Add music to inventory");
+  // console.log("Add games to inventory");
   const game = {
     title: req.body.title,
     developer: req.body.developer,
@@ -48,7 +48,7 @@ const addGame = async (req, res) => {
 };
 
 const updateGame = async (req, res) => {
-  // console.log("Update music information by ID");
+  // console.log("Update games information by ID");
   const gameId = new ObjectId(req.params.id);
   const game = {
     title: req.body.title,
@@ -62,7 +62,6 @@ const updateGame = async (req, res) => {
     .db()
     .collection("games")
     .replaceOne({ _id: gameId }, game);
-  musicController;
   if (response.acknowledged) {
     res.status(204).json(response);
   } else {
@@ -73,7 +72,7 @@ const updateGame = async (req, res) => {
 };
 
 const deleteGame = async (req, res) => {
-  // console.log("Delete music from inventory");
+  // console.log("Delete games from inventory");
   const gameId = new ObjectId(req.params.id);
   const response = await mongodb
     .getDb()
