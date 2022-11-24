@@ -16,7 +16,7 @@ const getGameById = async (req, res) => {
   const result = await mongodb
     .getDb()
     .db()
-    .collection("game")
+    .collection("games")
     .find({ _id: gameId });
   result.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");

@@ -40,7 +40,7 @@
                 "author": {
                   "example": "any"
                 },
-                "publicationDate": {
+                "yearPublished": {
                   "example": "any"
                 },
                 "format": {
@@ -101,7 +101,7 @@
                 "author": {
                   "example": "any"
                 },
-                "publicationDate": {
+                "yearPublished": {
                   "example": "any"
                 },
                 "format": {
@@ -165,16 +165,16 @@
                 "title": {
                   "example": "any"
                 },
-                "format": {
-                  "example": "any"
-                },
                 "rating": {
                   "example": "any"
                 },
-                "releaseDate": {
+                "yearReleased": {
                   "example": "any"
                 },
                 "duration": {
+                  "example": "any"
+                },
+                "format": {
                   "example": "any"
                 }
               }
@@ -229,16 +229,16 @@
                 "title": {
                   "example": "any"
                 },
-                "format": {
-                  "example": "any"
-                },
                 "rating": {
                   "example": "any"
                 },
-                "releaseDate": {
+                "yearReleased": {
                   "example": "any"
                 },
                 "duration": {
+                  "example": "any"
+                },
+                "format": {
                   "example": "any"
                 }
               }
@@ -311,7 +311,7 @@
                 "releaseDate": {
                   "example": "any"
                 },
-                "artwork": {
+                "totalSongs": {
                   "example": "any"
                 },
                 "format": {
@@ -379,6 +379,9 @@
                   "example": "any"
                 },
                 "releaseDate": {
+                  "example": "any"
+                },
+                "totalSongs": {
                   "example": "any"
                 },
                 "format": {
