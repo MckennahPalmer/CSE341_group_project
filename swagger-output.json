@@ -8,8 +8,8 @@
   "host": "",
   "basePath": "/",
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "paths": {
     "/books/": {
