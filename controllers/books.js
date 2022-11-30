@@ -3,6 +3,12 @@ const ObjectId = require("mongodb").ObjectId;
 
 const getAllBooks = async (req, res) => {
   // console.log("Getting all books");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const result = await mongodb.getDb().db().collection("books").find();
   result.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
@@ -12,6 +18,12 @@ const getAllBooks = async (req, res) => {
 
 const getBookById = async (req, res) => {
   // console.log("Getting book by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const bookId = new ObjectId(req.params.id);
   const result = await mongodb
     .getDb()
@@ -26,6 +38,12 @@ const getBookById = async (req, res) => {
 
 const addBook = async (req, res) => {
   // console.log("Add book to inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const book = {
     title: req.body.title,
     author: req.body.author,
@@ -48,6 +66,12 @@ const addBook = async (req, res) => {
 
 const updateBook = async (req, res) => {
   // console.log("Update book information by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const bookId = new ObjectId(req.params.id);
   const book = {
     title: req.body.title,
@@ -71,6 +95,12 @@ const updateBook = async (req, res) => {
 
 const deleteBook = async (req, res) => {
   // console.log("Delete book from inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const bookId = new ObjectId(req.params.id);
   const response = await mongodb
     .getDb()

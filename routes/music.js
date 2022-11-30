@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const musicController = require("../controller/music");
+const musicController = require("../controllers/music");
+const loadUser = require("../middleware/loadUser");
+
+router.use([loadUser]);
 
 // Get all music
 router.get("/", musicController.getAllMusic);

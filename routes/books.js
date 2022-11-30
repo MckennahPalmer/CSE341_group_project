@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const booksController = require("../controller/books");
+const booksController = require("../controllers/books");
+const loadUser = require("../middleware/loadUser");
+
+router.use([loadUser]);
 
 // Get all books
 router.get("/", booksController.getAllBooks);

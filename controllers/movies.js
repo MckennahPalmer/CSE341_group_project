@@ -3,6 +3,12 @@ const ObjectId = require("mongodb").ObjectId;
 
 const getAllMovies = async (req, res) => {
   // console.log("Getting all movies");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const result = await mongodb.getDb().db().collection("movies").find();
   result.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
@@ -12,6 +18,12 @@ const getAllMovies = async (req, res) => {
 
 const getMovieById = async (req, res) => {
   // console.log("Getting movie by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const movieId = new ObjectId(req.params.id);
   const result = await mongodb
     .getDb()
@@ -26,6 +38,12 @@ const getMovieById = async (req, res) => {
 
 const addMovie = async (req, res) => {
   // console.log("Add movie to inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const movie = {
     title: req.body.title,
     rating: req.body.rating,
@@ -49,6 +67,12 @@ const addMovie = async (req, res) => {
 
 const updateMovie = async (req, res) => {
   // console.log("Update movie information by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const movieId = new ObjectId(req.params.id);
   const movie = {
     title: req.body.title,
@@ -73,6 +97,12 @@ const updateMovie = async (req, res) => {
 
 const deleteMovie = async (req, res) => {
   // console.log("Delete movie from inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const movieId = new ObjectId(req.params.id);
   const response = await mongodb
     .getDb()

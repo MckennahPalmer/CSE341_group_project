@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const moviesController = require("../controller/movies");
+const moviesController = require("../controllers/movies");
+const loadUser = require("../middleware/loadUser");
+
+router.use([loadUser]);
 
 // Get all movies
 router.get("/", moviesController.getAllMovies);

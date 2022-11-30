@@ -3,6 +3,12 @@ const ObjectId = require("mongodb").ObjectId;
 
 const getAllMusic = async (req, res) => {
   // console.log("Getting all music");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const result = await mongodb.getDb().db().collection("music").find();
   result.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
@@ -12,6 +18,12 @@ const getAllMusic = async (req, res) => {
 
 const getMusicById = async (req, res) => {
   // console.log("Getting music by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const musicId = new ObjectId(req.params.id);
   const result = await mongodb
     .getDb()
@@ -26,6 +38,12 @@ const getMusicById = async (req, res) => {
 
 const addMusic = async (req, res) => {
   // console.log("Add music to inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const music = {
     artist: req.body.artist,
     album: req.body.album,
@@ -51,6 +69,12 @@ const addMusic = async (req, res) => {
 
 const updateMusic = async (req, res) => {
   // console.log("Update music information by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const musicId = new ObjectId(req.params.id);
   const music = {
     artist: req.body.artist,
@@ -77,6 +101,12 @@ const updateMusic = async (req, res) => {
 
 const deleteMusic = async (req, res) => {
   // console.log("Delete music from inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const musicId = new ObjectId(req.params.id);
   const response = await mongodb
     .getDb()

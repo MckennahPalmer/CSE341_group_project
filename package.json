@@ -21,10 +21,12 @@
   "homepage": "https://github.com/jesse-wilson88/cse341TeamProject#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongodb": "^4.11.0",
     "mongoose": "^6.7.2",
+    "node": "^19.1.0",
     "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {

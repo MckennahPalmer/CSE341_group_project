@@ -8,6 +8,20 @@ const doc = {
   },
   host: "",
   schemes: ["https", "http"],
+  securityDefinitions: {
+    Authorization: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header",
+      description: "Authorization token (Bearer)",
+      example: "Bearer <your token>",
+    },
+  },
+  security: [
+    {
+      Authorization: [],
+    },
+  ],
 };
 
 const outputFile = "swagger-output.json";

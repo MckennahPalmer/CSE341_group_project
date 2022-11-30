@@ -3,6 +3,12 @@ const ObjectId = require("mongodb").ObjectId;
 
 const getAllGames = async (req, res) => {
   // console.log("Getting all games");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const result = await mongodb.getDb().db().collection("games").find();
   result.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
@@ -12,6 +18,12 @@ const getAllGames = async (req, res) => {
 
 const getGameById = async (req, res) => {
   // console.log("Getting games by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const gameId = new ObjectId(req.params.id);
   const result = await mongodb
     .getDb()
@@ -26,6 +38,12 @@ const getGameById = async (req, res) => {
 
 const addGame = async (req, res) => {
   // console.log("Add games to inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const game = {
     title: req.body.title,
     developer: req.body.developer,
@@ -49,6 +67,12 @@ const addGame = async (req, res) => {
 
 const updateGame = async (req, res) => {
   // console.log("Update games information by ID");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const gameId = new ObjectId(req.params.id);
   const game = {
     title: req.body.title,
@@ -73,6 +97,12 @@ const updateGame = async (req, res) => {
 
 const deleteGame = async (req, res) => {
   // console.log("Delete games from inventory");
+  if (!req.user) {
+    res.status(401);
+    res.send("Authorization failed.");
+    return;
+  }
+
   const gameId = new ObjectId(req.params.id);
   const response = await mongodb
     .getDb()

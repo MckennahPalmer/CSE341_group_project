@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const gameController = require("../controller/games");
+const gameController = require("../controllers/games");
+const loadUser = require("../middleware/loadUser");
+
+router.use([loadUser]);
 
 // Get all games
 router.get("/", gameController.getAllGames);
