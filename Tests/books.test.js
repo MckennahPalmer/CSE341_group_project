@@ -1,4 +1,3 @@
-//const { it, default: test, beforeEach } = require('node:test')
 const booksController = require("../controllers/books");
 
 let req, res;
@@ -7,30 +6,27 @@ beforeEach(() => {
   req = {};
   send = jest.fn(),
   res = {
-    status: jest.fn(() => {
-      send
-    }),
-    json: jest.nf(),
+    status: jest.fn(() => ({
+      send,
+    })),
+    json: jest.fn(),
   }
 });
 
-describe("Books Tests", () => {
-
+describe("index()", () => {
   describe("Call all books", () => {
-    beforeEach(() => {
-      //might need this for authentication later.
-    });
 
     it('Responds with a 200', () =>{
-      booksController.index(req, res);
+      booksController.getAllBooks(req, res);
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("responds with a 401", () => {
-      booksController.index(req, res);
+      booksController.getAllBooks(req, res);
 
       expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.send).toHaveBeenCalledWith("Authorization failed.");
     });
 
   });
@@ -45,33 +41,82 @@ describe("Books Tests", () => {
         format: "Paperback"
       }];
 
-      expect(booksController.getBookById(Id).toBe(bookOne));
+      booksController.getBookById(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(bookOne);
     });
 
-    it("responds with the proper error message", () => {});
+    it("responds with a 401", () => {
+      booksController.getBookById(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.send).toHaveBeenCalledWith("Authorization failed.");
+    });
   });
 
   describe("Add new book", () => {
     it('Adds book and return successful code', () => {
-      expect(booksController.getAllBooks(res.status(200))).toBe(json(lists));
+      booksController.addBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
-    it("display the error message", () => {});
+    it("Responds with a 401", () => {
+      booksController.addBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.send).toHaveBeenCalledWith("Authorization failed.");
+    });
+
+    it("display the error message", () => {
+      booksController.addBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith("An error occurred while adding a book.");
+    });
   });
 
   describe("Update the book", () => {
     it('changes some info and saves it', () =>{
-      expect(booksController.getAllBooks(res.status(200))).toBe(json(lists)); 
+      booksController.updateBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
-    it("display the error message", () => {});
+    it("Responds with a 401", () => {
+      booksController.updateBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.send).toHaveBeenCalledWith("Authorization failed.");
+    });
+
+    it("display the error message", () => {
+      booksController.updateBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith("An error occurred while update the book.");
+    });
   });
 
   describe("Deletes the book", () => {
     it('Removes the book we added earler from the database', () =>{
-      expect(booksController.getAllBooks(res.status(200))).toBe(json(lists));
+      booksController.deleteBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
-    it("display the error message", () => {});
+    it("Responds with a 401", () => {
+      booksController.deleteBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.send).toHaveBeenCalledWith("Authorization failed.");
+    });
+
+    it("display the error message", () => {
+      booksController.deleteBook(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith("An error occurred while trying to delete the book.");
+    });
   });
 });
