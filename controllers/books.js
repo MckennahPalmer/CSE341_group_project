@@ -5,11 +5,12 @@ const getAllBooks = async (req, res) => {
   // console.log("Getting all books");
   if (!req.user) {
     res.status(401);
-    res.send("Authorization failed.");
+    res.send("Authentication failed.");
     return;
   }
 
   const result = await mongodb.getDb().db().collection("books").find();
+  console.log("====>", lists);
   result.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(lists);
@@ -20,7 +21,7 @@ const getBookById = async (req, res) => {
   // console.log("Getting book by ID");
   if (!req.user) {
     res.status(401);
-    res.send("Authorization failed.");
+    res.send("Authentication failed.");
     return;
   }
 
@@ -40,7 +41,7 @@ const addBook = async (req, res) => {
   // console.log("Add book to inventory");
   if (!req.user) {
     res.status(401);
-    res.send("Authorization failed.");
+    res.send("Authentication failed.");
     return;
   }
 
@@ -68,7 +69,7 @@ const updateBook = async (req, res) => {
   // console.log("Update book information by ID");
   if (!req.user) {
     res.status(401);
-    res.send("Authorization failed.");
+    res.send("Authentication failed.");
     return;
   }
 
@@ -97,7 +98,7 @@ const deleteBook = async (req, res) => {
   // console.log("Delete book from inventory");
   if (!req.user) {
     res.status(401);
-    res.send("Authorization failed.");
+    res.send("Authentication failed.");
     return;
   }
 

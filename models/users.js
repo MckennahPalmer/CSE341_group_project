@@ -1,5 +1,4 @@
 // const Schema = require("mongoose").Schema;
-// // const BookSchema = require("./bookSchema");
 
 // const userSchema = new Schema({
 //   identifier: { type: String, unique: true, required: true },
