@@ -2,23 +2,26 @@ const mongodb = require("../db/connect");
 const ObjectId = require("mongodb").ObjectId;
 
 const getAllBooks = async (req, res) => {
-  // console.log("Getting all books");
   if (!req.user) {
     res.status(401);
     res.send("Authentication failed.");
     return;
   }
 
-  const result = await mongodb.getDb().db().collection("books").find();
-  console.log("====>", lists);
-  result.toArray().then((lists) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(lists);
-  });
+  const response = await mongodb.getDb().db().collection("books").find();
+  if (!response) {
+    res
+      .status(500)
+      .json(response.error || "An error occurred while getting all the books");
+  } else {
+    response.toArray().then((lists) => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(lists);
+    });
+  }
 };
 
 const getBookById = async (req, res) => {
-  // console.log("Getting book by ID");
   if (!req.user) {
     res.status(401);
     res.send("Authentication failed.");
@@ -26,19 +29,25 @@ const getBookById = async (req, res) => {
   }
 
   const bookId = new ObjectId(req.params.id);
-  const result = await mongodb
+  const response = await mongodb
     .getDb()
     .db()
     .collection("books")
     .find({ _id: bookId });
-  result.toArray().then((lists) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(lists[0]);
-  });
+
+  if (!response) {
+    res
+      .status(500)
+      .json(response.error || "An error occurred while getting this book");
+  } else {
+    response.toArray().then((lists) => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(lists[0]);
+    });
+  }
 };
 
 const addBook = async (req, res) => {
-  // console.log("Add book to inventory");
   if (!req.user) {
     res.status(401);
     res.send("Authentication failed.");
@@ -90,12 +99,11 @@ const updateBook = async (req, res) => {
   } else {
     res
       .status(500)
-      .json(response.error || "An error occurred while update the book.");
+      .json(response.error || "An error occurred while updating the book.");
   }
 };
 
 const deleteBook = async (req, res) => {
-  // console.log("Delete book from inventory");
   if (!req.user) {
     res.status(401);
     res.send("Authentication failed.");
