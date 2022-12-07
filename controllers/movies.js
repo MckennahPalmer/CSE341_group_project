@@ -9,11 +9,17 @@ const getAllMovies = async (req, res) => {
     return;
   }
 
-  const result = await mongodb.getDb().db().collection("movies").find();
-  result.toArray().then((lists) => {
+  const response = await mongodb.getDb().db().collection("movies").find();
+  if (!response) {
+    res
+      .status(500)
+      .json(response.error || "An error occurred while getting all the movies");
+  } else {
+  response.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(lists);
   });
+}
 };
 
 const getMovieById = async (req, res) => {
@@ -25,15 +31,21 @@ const getMovieById = async (req, res) => {
   }
 
   const movieId = new ObjectId(req.params.id);
-  const result = await mongodb
+  const response = await mongodb
     .getDb()
     .db()
     .collection("movies")
     .find({ _id: movieId });
-  result.toArray().then((lists) => {
+    if (!response) {
+      res
+        .status(500)
+        .json(response.error || "An error occurred while getting this movie");
+    } else {
+  response.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(lists[0]);
   });
+}
 };
 
 const addMovie = async (req, res) => {

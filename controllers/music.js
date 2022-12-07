@@ -2,18 +2,24 @@ const mongodb = require("../db/connect");
 const ObjectId = require("mongodb").ObjectId;
 
 const getAllMusic = async (req, res) => {
-  // console.log("Getting all music");
+  console.log("Getting all music");
   if (!req.user) {
     res.status(401);
     res.send("Authorization failed.");
     return;
   }
 
-  const result = await mongodb.getDb().db().collection("music").find();
-  result.toArray().then((lists) => {
+  const response = await mongodb.getDb().db().collection("music").find();
+  if (!response) {
+    res
+      .status(500)
+      .json(response.error || "An error occurred while getting all the music");
+  } else {
+  response.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(lists);
   });
+}
 };
 
 const getMusicById = async (req, res) => {
@@ -25,15 +31,21 @@ const getMusicById = async (req, res) => {
   }
 
   const musicId = new ObjectId(req.params.id);
-  const result = await mongodb
+  const response = await mongodb
     .getDb()
     .db()
     .collection("music")
     .find({ _id: musicId });
-  result.toArray().then((lists) => {
+    if (!response) {
+      res
+        .status(500)
+        .json(response.error || "An error occurred while getting this music entry");
+    } else {
+  response.toArray().then((lists) => {
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(lists[0]);
   });
+}
 };
 
 const addMusic = async (req, res) => {

@@ -9,11 +9,17 @@ const getAllGames = async (req, res) => {
     return;
   }
 
-  const result = await mongodb.getDb().db().collection("games").find();
-  result.toArray().then((lists) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(lists);
-  });
+  const response = await mongodb.getDb().db().collection("games").find();
+  if (!response) {
+    res
+      .status(500)
+      .json(response.error || "An error occurred while getting all the games");
+  } else {
+    response.toArray().then((lists) => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(lists);
+    });
+  }
 };
 
 const getGameById = async (req, res) => {
@@ -25,15 +31,21 @@ const getGameById = async (req, res) => {
   }
 
   const gameId = new ObjectId(req.params.id);
-  const result = await mongodb
+  const response = await mongodb
     .getDb()
     .db()
     .collection("games")
     .find({ _id: gameId });
-  result.toArray().then((lists) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(lists[0]);
-  });
+  if (!response) {
+    res
+      .status(500)
+      .json(response.error || "An error occurred while getting this game");
+  } else {
+    response.toArray().then((lists) => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(lists[0]);
+    });
+  }
 };
 
 const addGame = async (req, res) => {
