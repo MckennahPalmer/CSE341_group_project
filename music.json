@@ -4,8 +4,17 @@
     "album": "Sheer Heart Attack",
     "label": "Elektra Music",
     "genre": "Rock",
-    "releaseDate": "1974",
+    "releaseDate": "11/08/1974",
     "numSongs": "13",
+    "format": "CD"
+  },
+  {
+    "artist": "Killers",
+    "album": "Hot Fuss",
+    "label": "Island Records",
+    "genre": "Rock",
+    "releaseDate": "06/07/2004",
+    "numSongs": "11",
     "format": "CD"
   }
 ]

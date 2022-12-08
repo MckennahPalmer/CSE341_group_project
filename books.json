@@ -2,19 +2,25 @@
   {
     "title": "Where The Red Fern Grows",
     "author": "Wilson Rawls",
-    "yearPublished": "1961",
+    "publicationDate": "01/01/1961",
     "format": "Paperback"
   },
   {
     "title": "To Kill a Mockingbird",
     "author": "Harper Lee",
-    "yearPublished": "1960",
+    "publicationDate": "01/01/1960",
     "format": "Paperback"
   },
   {
     "title": "The Da Vinci Code",
     "author": "Dan Brown",
-    "yearPublished": "2003",
+    "publicationDate": "03/18/2003",
+    "format": "Paperback"
+  },
+  {
+    "title": "Steelheart",
+    "author": "Brandon Sanderson",
+    "yearPublished": "09/24/2013",
     "format": "Paperback"
   }
 ]

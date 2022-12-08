@@ -2,8 +2,15 @@
   {
     "title": "The Avengers",
     "rating": "PG-13",
-    "yearReleased": "2012",
+    "releaseDate": "05/04/2012",
     "duration": "2h 23m",
+    "format": "DVD"
+  },
+  {
+    "title": "Raiders of the Lost Ark",
+    "rating": "PG",
+    "yearReleased": "06/12/1981",
+    "duration": "1h 34m",
     "format": "DVD"
   }
 ]

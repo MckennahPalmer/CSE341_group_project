@@ -3,7 +3,14 @@
     "title": "World Of Warcraft",
     "developer": "Blizzard Entertainment",
     "publisher": "Blizzard Entertainment",
-    "releaseDate": "2004",
+    "releaseDate": "11/23/2004",
     "platform": "PC"
+  },
+  {
+    "title": "Legend of Zelda: Breath of the Wild",
+    "developer": "Nintendo Entertainment Planning & Development",
+    "publisher": "Nintendo",
+    "releaseDate": "03/03/2017",
+    "platform": "Nintendo Switch"
   }
 ]
