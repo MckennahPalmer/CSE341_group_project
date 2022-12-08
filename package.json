@@ -28,7 +28,7 @@
     "mongoose": "^6.7.2",
     "node": "^19.1.0",
     "swagger-ui-express": "^4.6.0",
-    "validate.js": "^0.13.1"
+    "validatorjs": "^3.22.1"
   },
   "devDependencies": {
     "jest": "^29.3.1",
