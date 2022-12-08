@@ -3,6 +3,8 @@ const router = express.Router();
 
 const gameController = require("../controllers/games");
 const loadUser = require("../middleware/loadUser");
+const validation = require("../middleware/validate");
+
 
 router.use([loadUser]);
 
@@ -11,9 +13,9 @@ router.get("/", gameController.getAllGames);
 // Get game by ID
 router.get("/:id", gameController.getGameById);
 // Add game to DB
-router.post("/", gameController.addGame);
+router.post("/", validation.saveGame, gameController.addGame);
 // Update game information
-router.put("/:id", gameController.updateGame);
+router.put("/:id", validation.saveGame, gameController.updateGame);
 // Delete game from inventory
 router.delete("/:id", gameController.deleteGame);
 
