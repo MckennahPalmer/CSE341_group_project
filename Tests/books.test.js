@@ -1,5 +1,5 @@
 const booksController = require("../controllers/books");
-const mockingoose = require("mockingoose");
+//const mockingoose = require("mockingoose");
 // const books = require("../routes/books");
 jest.mock("../db/connect");
 
@@ -94,6 +94,7 @@ describe("getAllBooks()", () => {
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
+    
     it("Responds with 'Authentication failed.'", () => {
       booksController.getAllBooks(req, res);
 
