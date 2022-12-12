@@ -9,7 +9,7 @@ const getAllGames = async (req, res) => {
     return;
   }
 
-  const response = await mongodb.getDb().db().collection("games").find();
+  const response = await mongodb.getCollection("games").find();
   if (!response) {
     res
       .status(500)
@@ -32,9 +32,7 @@ const getGameById = async (req, res) => {
 
   const gameId = new ObjectId(req.params.id);
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("games")
+    .getCollection("games")
     .find({ _id: gameId });
   if (!response) {
     res
@@ -64,9 +62,7 @@ const addGame = async (req, res) => {
     platform: req.body.platform,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("games")
+    .getCollection("games")
     .insertOne(game);
   if (response.acknowledged) {
     res.status(201).json(response);
@@ -94,9 +90,7 @@ const updateGame = async (req, res) => {
     platform: req.body.platform,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("games")
+    .getCollection("games")
     .replaceOne({ _id: gameId }, game);
   if (response.acknowledged) {
     res.status(204).json(response);
@@ -117,9 +111,7 @@ const deleteGame = async (req, res) => {
 
   const gameId = new ObjectId(req.params.id);
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("games")
+    .getCollection("games")
     .deleteOne({ _id: gameId }, true);
   if (response.acknowledged) {
     res.status(200).json(response);

@@ -9,7 +9,7 @@ const getAllMusic = async (req, res) => {
     return;
   }
 
-  const response = await mongodb.getDb().db().collection("music").find();
+  const response = await mongodb.getCollection("music").find();
   if (!response) {
     res
       .status(500)
@@ -32,9 +32,7 @@ const getMusicById = async (req, res) => {
 
   const musicId = new ObjectId(req.params.id);
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("music")
+    .getCollection("music")
     .find({ _id: musicId });
     if (!response) {
       res
@@ -66,9 +64,7 @@ const addMusic = async (req, res) => {
     format: req.body.format,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("music")
+    .getCollection("music")
     .insertOne(music);
   if (response.acknowledged) {
     res.status(201).json(response);
@@ -98,9 +94,7 @@ const updateMusic = async (req, res) => {
     format: req.body.format,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("music")
+    .getCollection("music")
     .replaceOne({ _id: musicId }, music);
   if (response.acknowledged) {
     res.status(204).json(response);
@@ -121,9 +115,7 @@ const deleteMusic = async (req, res) => {
 
   const musicId = new ObjectId(req.params.id);
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("music")
+    .getCollection("music")
     .deleteOne({ _id: musicId }, true);
   if (response.acknowledged) {
     res.status(200).json(response);
