@@ -26,7 +26,14 @@ const getDb = () => {
   return _db;
 };
 
+const getCollection = (collection) => {
+  if (!_db) {
+    throw Error("DB not initialized");
+  }
+  return _db.db().collection(collection);
+};
+
 module.exports = {
   initDb,
-  getDb,
+  getCollection
 };

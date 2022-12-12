@@ -8,7 +8,7 @@ const getAllBooks = async (req, res) => {
     return;
   }
 
-  const response = await mongodb.getDb().db().collection("books").find();
+  const response = await mongodb.getCollection("books").find();
   if (!response) {
     res
       .status(500)
@@ -23,27 +23,31 @@ const getAllBooks = async (req, res) => {
 
 const getBookById = async (req, res) => {
   if (!req.user) {
-    res.status(401);
-    res.send("Authentication failed.");
+    res.status(401).send("Authentication failed.");
     return;
   }
-
+  if (!req.params.id) {
+    res.status(400).send("Missing book id.");
+    return;
+  } 
   const bookId = new ObjectId(req.params.id);
-  const response = await mongodb
-    .getDb()
-    .db()
-    .collection("books")
-    .find({ _id: bookId });
 
-  if (!response) {
-    res
-      .status(500)
-      .json(response.error || "An error occurred while getting this book");
-  } else {
-    response.toArray().then((lists) => {
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(lists[0]);
-    });
+  try {  
+    const response = await mongodb.getCollection("books").find({ _id: bookId });
+    if (!response) {
+      res.status(400).send("No book returned for that id.");
+      return;
+    } else {
+      response.toArray().then((lists) => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(200).json(lists[0]);
+      });
+    }
+  } catch (error) {
+    res.status(500);
+    const msg = "An error occurred while getting this book"
+    res.send(msg);
+    return;
   }
 };
 
@@ -61,9 +65,7 @@ const addBook = async (req, res) => {
     format: req.body.format,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("books")
+    .getCollection("books")
     .insertOne(book);
   if (response.acknowledged) {
     res.status(201).json(response);
@@ -90,9 +92,7 @@ const updateBook = async (req, res) => {
     format: req.body.format,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("books")
+    .getCollection("books")
     .replaceOne({ _id: bookId }, book);
   if (response.acknowledged) {
     res.status(204).json(response);
@@ -112,9 +112,7 @@ const deleteBook = async (req, res) => {
 
   const bookId = new ObjectId(req.params.id);
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("books")
+    .getCollection("books")
     .deleteOne({ _id: bookId }, true);
   if (response.acknowledged) {
     res.status(200).json(response);

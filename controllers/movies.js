@@ -9,7 +9,7 @@ const getAllMovies = async (req, res) => {
     return;
   }
 
-  const response = await mongodb.getDb().db().collection("movies").find();
+  const response = await mongodb.getCollection("movies").find();
   if (!response) {
     res
       .status(500)
@@ -32,9 +32,7 @@ const getMovieById = async (req, res) => {
 
   const movieId = new ObjectId(req.params.id);
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("movies")
+    .getCollection("movies")
     .find({ _id: movieId });
     if (!response) {
       res
@@ -64,9 +62,7 @@ const addMovie = async (req, res) => {
     format: req.body.format,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("movies")
+    .getCollection("movies")
     .insertOne(movie);
   if (response.acknowledged) {
     res.status(201).json(response);
@@ -94,9 +90,7 @@ const updateMovie = async (req, res) => {
     format: req.body.format,
   };
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("movies")
+    .getCollection("movies")
     .replaceOne({ _id: movieId }, movie);
   if (response.acknowledged) {
     res.status(204).json(response);
@@ -117,9 +111,7 @@ const deleteMovie = async (req, res) => {
 
   const movieId = new ObjectId(req.params.id);
   const response = await mongodb
-    .getDb()
-    .db()
-    .collection("movies")
+    .getCollection("movies")
     .deleteOne({ _id: movieId }, true);
   if (response.acknowledged) {
     res.status(200).json(response);
