@@ -68,7 +68,13 @@ const addGame = async (req, res) => {
     return;
   }
 
-  const game = validateFields(req, res);
+  const game = {
+    title: req.body.title,
+    developer: req.body.developer,
+    publisher: req.body.publisher,
+    releaseDate: req.body.releaseDate,
+    platform: req.body.platform,
+  };
 
   try {
     const response = await mongodb.getCollection("games").insertOne(game);
@@ -106,7 +112,14 @@ const updateGame = async (req, res) => {
   }
 
   const gameId = new ObjectId(req.params.id);
-  const game = validateFields(req, res);
+
+  const game = {
+    title: req.body.title,
+    developer: req.body.developer,
+    publisher: req.body.publisher,
+    releaseDate: req.body.releaseDate,
+    platform: req.body.platform,
+  };
 
   try {
     const response = await mongodb

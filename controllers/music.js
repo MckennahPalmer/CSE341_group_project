@@ -1,4 +1,3 @@
-const { format } = require("path");
 const mongodb = require("../db/connect");
 const ObjectId = require("mongodb").ObjectId;
 
@@ -68,7 +67,15 @@ const addMusic = async (req, res) => {
     return;
   }
 
-  const music = validateFields(req, res);
+  const music = {
+    artist: req.body.artist,
+    album: req.body.album,
+    label: req.body.label,
+    genre: req.body.genre,
+    releaseDate: req.body.releaseDate,
+    numSongs: req.body.numSongs,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb.getCollection("music").insertOne(music);
@@ -106,7 +113,16 @@ const updateMusic = async (req, res) => {
   }
 
   const musicId = new ObjectId(req.params.id);
-  const music = validateFields(req, res);
+
+  const music = {
+    artist: req.body.artist,
+    album: req.body.album,
+    label: req.body.label,
+    genre: req.body.genre,
+    releaseDate: req.body.releaseDate,
+    numSongs: req.body.numSongs,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb

@@ -67,7 +67,13 @@ const addMovie = async (req, res) => {
     return;
   }
 
-  const movie = validateFields(req, res);
+  const movie = {
+    title: req.body.title,
+    rating: req.body.rating,
+    yearReleased: req.body.yearReleased,
+    duration: req.body.duration,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb.getCollection("movies").insertOne(movie);
@@ -105,7 +111,14 @@ const updateMovie = async (req, res) => {
   }
 
   const movieId = new ObjectId(req.params.id);
-  const movie = validateFields(req, res);
+
+  const movie = {
+    title: req.body.title,
+    rating: req.body.rating,
+    yearReleased: req.body.yearReleased,
+    duration: req.body.duration,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb
