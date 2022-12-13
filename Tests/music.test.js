@@ -41,11 +41,14 @@ describe("getAllMusic()", () => {
 
       const musicOne = [
         {
-          title: "To Kill a Mockingbird",
-          author: "Harper Lee",
-          yearPublished: "1960",
-          format: "Paperback",
-        },
+          "artist": "Queen",
+          "album": "Sheer Heart Attack",
+          "label": "Elektra Music",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ];
 
       mongodb.getCollection = jest.fn(() => ({
@@ -115,11 +118,14 @@ describe("getAllMusic()", () => {
     it("Adds music and return successful code", async () => {
       const musicTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "artist": "Queen",
+          "album": "Sheer Heart Attack",
+          "label": "Elektra Music",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ]; 
 
       const req = {
@@ -159,10 +165,13 @@ describe("getAllMusic()", () => {
     it("Responds with 400, missing field", async () => {
       const musicTest = [
         {
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "album": "Sheer Heart Attack",
+          "label": "Elektra Music",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ]; 
 
       const req = {
@@ -172,17 +181,20 @@ describe("getAllMusic()", () => {
       
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title");
+      expect(res.send).toHaveBeenCalledWith("Missing field error: artist");
     });
 
     it("Fails to add to music to DB", async () => {
       const musicTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "artist": "Queen",
+          "album": "Sheer Heart Attack",
+          "label": "Elektra Music",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ]; 
 
       const req = {
@@ -207,11 +219,14 @@ describe("getAllMusic()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const musicTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "artist": "Queen",
+          "album": "Sheer Heart Attack",
+          "label": "Elektra Music",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ]; 
       const req = {
         user: "mockUser",
@@ -231,11 +246,14 @@ describe("getAllMusic()", () => {
     it("changes some info and saves it", async () => {
       const musicTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioMusic",
-        },
+          "artist": "Jesse",
+          "album": "Sheer Exam Attack",
+          "label": "Extreme Records",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ];
   
       const req = {
@@ -291,17 +309,20 @@ describe("getAllMusic()", () => {
       };
       await musicController.updateMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title,author,yearPublished,format");
+      expect(res.send).toHaveBeenCalledWith("Missing field error: artist,album,label,genre,releaseDate,numSongs,format");
     });
 
     it("Fails to add to field to Music", async () => {
       const musicTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioMusic",
-        },
+          "artist": "Jesse",
+          "album": "Sheer Exam Attack",
+          "label": "Extreme Records",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ];
   
       const req = {
@@ -327,11 +348,14 @@ describe("getAllMusic()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const musicTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioMusic",
-        },
+          "artist": "Jesse",
+          "album": "Sheer Exam Attack",
+          "label": "Extreme Records",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ];
       const req = {
         user: "mockUser",
@@ -348,14 +372,6 @@ describe("getAllMusic()", () => {
 
   describe("Deletes the music", () => {
     it("Removes the music we added earler from the database", async () => {
-      // const musicTest = [
-      //   {
-      //     title: "The Fellowship of the Ring",
-      //     author: "J. R. R. Tolkien",
-      //     yearPublished: "1954",
-      //     format: "Paperback",
-      //   },
-      // ]; 
 
       const req = {
         user: "mockUser",
@@ -403,11 +419,14 @@ describe("getAllMusic()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const musicTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioMusic",
-        },
+          "artist": "Jesse",
+          "album": "Sheer Exam Attack",
+          "label": "Extreme Records",
+          "genre": "Rock",
+          "releaseDate": "11/08/1974",
+          "numSongs": "13",
+          "format": "CD"
+        }
       ];
       const req = {
         user: "mockUser",

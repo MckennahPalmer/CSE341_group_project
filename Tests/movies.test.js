@@ -41,11 +41,12 @@ describe("getAllMovies()", () => {
 
       const movieOne = [
         {
-          title: "To Kill a Mockingbird",
-          author: "Harper Lee",
-          yearPublished: "1960",
-          format: "Paperback",
-        },
+          "title": "Raiders of the Lost Ark",
+          "rating": "PG",
+          "yearReleased": "06/12/1981",
+          "duration": "1h 34m",
+          "format": "DVD"
+        }
       ];
 
       mongodb.getCollection = jest.fn(() => ({
@@ -115,11 +116,12 @@ describe("getAllMovies()", () => {
     it("Adds movie and return successful code", async () => {
       const movieTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "title": "Harry Potter and the Deathly Hallows part 1",
+          "rating": "PG-13",
+          "yearReleased": "2010",
+          "duration": "2h 26m",
+          "format": "DVD"
+        }
       ]; 
 
       const req = {
@@ -159,10 +161,11 @@ describe("getAllMovies()", () => {
     it("Responds with 400, missing field", async () => {
       const movieTest = [
         {
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "rating": "PG-13",
+          "yearReleased": "2010",
+          "duration": "2h 26m",
+          "format": "DVD"
+        }
       ]; 
 
       const req = {
@@ -178,11 +181,12 @@ describe("getAllMovies()", () => {
     it("Fails to add to movie to DB", async () => {
       const movieTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "title": "Harry Potter and the Deathly Hallows part 1",
+          "rating": "PG-13",
+          "yearReleased": "2010",
+          "duration": "2h 26m",
+          "format": "DVD"
+        }
       ]; 
 
       const req = {
@@ -207,11 +211,12 @@ describe("getAllMovies()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const movieTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "title": "Harry Potter and the Deathly Hallows part 1",
+          "rating": "PG-13",
+          "yearReleased": "2010",
+          "duration": "2h 26m",
+          "format": "DVD"
+        }
       ]; 
       const req = {
         user: "mockUser",
@@ -231,11 +236,12 @@ describe("getAllMovies()", () => {
     it("changes some info and saves it", async () => {
       const movieTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioMovie",
-        },
+          "title": "Colton Kramer and the Deathly Finals part 1",
+          "rating": "PG-13",
+          "yearReleased": "2010",
+          "duration": "2h 26m",
+          "format": "In-person"
+        }
       ];
   
       const req = {
@@ -291,17 +297,18 @@ describe("getAllMovies()", () => {
       };
       await moviesController.updateMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title,author,yearPublished,format");
+      expect(res.send).toHaveBeenCalledWith("Missing field error: title,rating,yearReleased,duration,format");
     });
 
     it("Fails to add to field to Movie", async () => {
       const movieTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioMovie",
-        },
+          "title": "Colton Kramer and the Deathly Finals part 1",
+          "rating": "PG-13",
+          "yearReleased": "2010",
+          "duration": "2h 26m",
+          "format": "In-person"
+        }
       ];
   
       const req = {
@@ -327,11 +334,12 @@ describe("getAllMovies()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const movieTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioMovie",
-        },
+          "title": "Colton Kramer and the Deathly Finals part 1",
+          "rating": "PG-13",
+          "yearReleased": "2010",
+          "duration": "2h 26m",
+          "format": "In-person"
+        }
       ];
       const req = {
         user: "mockUser",
@@ -348,14 +356,6 @@ describe("getAllMovies()", () => {
 
   describe("Deletes the movie", () => {
     it("Removes the movie we added earler from the database", async () => {
-      // const movieTest = [
-      //   {
-      //     title: "The Fellowship of the Ring",
-      //     author: "J. R. R. Tolkien",
-      //     yearPublished: "1954",
-      //     format: "Paperback",
-      //   },
-      // ]; 
 
       const req = {
         user: "mockUser",

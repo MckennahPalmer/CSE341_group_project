@@ -1,3 +1,4 @@
+const { format } = require("path");
 const mongodb = require("../db/connect");
 const ObjectId = require("mongodb").ObjectId;
 
@@ -171,17 +172,20 @@ module.exports = {
 
 function validateFields(req, res) {
   let music;
-  const validFields = ["title", "author", "yearPublished", "format"];
+  const validFields = ["artist", "album", "label", "genre", "releaseDate", "numSongs", "format"];
   const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
   if (missingFields.length > 0) {
     res.status(400).send(`Missing field error: ${missingFields}`);
     return;
   } else {
     music = {
-      title: req.body.title,
-      author: req.body.author,
-      yearPublished: req.body.yearPublished,
-      format: req.body.format,
+      artist: req.body.artist,
+      album: req.body.album,
+      label: req.body.label,
+      genre: req.body.genre,
+      releaseDate: req.body.releaseDate,
+      numSongs: req.body.numSongs,
+      format: req.body.format
     };
   }
   return music;

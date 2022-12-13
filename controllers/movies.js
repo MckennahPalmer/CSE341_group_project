@@ -171,7 +171,7 @@ module.exports = {
 
 function validateFields(req, res) {
   let movie;
-  const validFields = ["title", "author", "yearPublished", "format"];
+  const validFields = ["title", "rating", "yearReleased", "duration", "format"];
   const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
   if (missingFields.length > 0) {
     res.status(400).send(`Missing field error: ${missingFields}`);
@@ -179,9 +179,10 @@ function validateFields(req, res) {
   } else {
     movie = {
       title: req.body.title,
-      author: req.body.author,
-      yearPublished: req.body.yearPublished,
-      format: req.body.format,
+      rating: req.body.rating,
+      yearReleased: req.body.yearReleased,
+      duration: req.body.duration,
+      format: req.body.format
     };
   }
   return movie;

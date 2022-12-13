@@ -1,3 +1,4 @@
+const { platform } = require("os");
 const mongodb = require("../db/connect");
 const ObjectId = require("mongodb").ObjectId;
 
@@ -133,19 +134,6 @@ const deleteGame = async (req, res) => {
 
   const gameId = new ObjectId(req.params.id);
 
-  // const response = await mongodb
-  //   .getCollection("games")
-  //   .deleteOne({ _id: gameId }, true);
-  // if (response.acknowledged) {
-  //   res.status(200).json(response);
-  // } else {
-  //   res
-  //     .status(500)
-  //     .json(
-  //       response.error || "An error occurred while trying to delete the game."
-  //     );
-  // }
-
   try {
     const response = await mongodb.getCollection("games").deleteOne({ _id: gameId }, true);
     if (response.acknowledged) {
@@ -173,7 +161,7 @@ module.exports = {
 
 function validateFields(req, res) {
   let game;
-  const validFields = ["title", "author", "yearPublished", "format"];
+  const validFields = ["title", "developer", "publisher", "releaseDate", "platform"];
   const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
   if (missingFields.length > 0) {
     res.status(400).send(`Missing field error: ${missingFields}`);
@@ -181,9 +169,10 @@ function validateFields(req, res) {
   } else {
     game = {
       title: req.body.title,
-      author: req.body.author,
-      yearPublished: req.body.yearPublished,
-      format: req.body.format,
+      developer: req.body.developer,
+      publisher: req.body.publisher,
+      releaseDate: req.body.releaseDate,
+      platform: req.body.platform
     };
   }
   return game;

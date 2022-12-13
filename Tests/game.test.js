@@ -41,11 +41,12 @@ describe("getAllGames()", () => {
 
       const gameOne = [
         {
-          title: "To Kill a Mockingbird",
-          author: "Harper Lee",
-          yearPublished: "1960",
-          format: "Paperback",
-        },
+          "title": "World Of Warcraft",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "11/23/2004",
+          "platform": "PC"
+        }
       ];
 
       mongodb.getCollection = jest.fn(() => ({
@@ -115,11 +116,12 @@ describe("getAllGames()", () => {
     it("Adds game and return successful code", async () => {
       const gameTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "title": "World Of Warcraft",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "11/23/2004",
+          "platform": "PC"
+        }
       ]; 
 
       const req = {
@@ -159,10 +161,11 @@ describe("getAllGames()", () => {
     it("Responds with 400, missing field", async () => {
       const gameTest = [
         {
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "11/23/2004",
+          platform: "PC"
+        }
       ]; 
 
       const req = {
@@ -178,11 +181,12 @@ describe("getAllGames()", () => {
     it("Fails to add to game to DB", async () => {
       const gameTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "title": "World Of Warcraft",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "11/23/2004",
+          "platform": "PC"
+        }
       ]; 
 
       const req = {
@@ -207,11 +211,12 @@ describe("getAllGames()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const gameTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
+          "title": "World Of Warcraft",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "11/23/2004",
+          "platform": "PC"
+        }
       ]; 
       const req = {
         user: "mockUser",
@@ -231,11 +236,12 @@ describe("getAllGames()", () => {
     it("changes some info and saves it", async () => {
       const gameTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioGame",
-        },
+          "title": "World Of Monty Python",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "12/25/2022",
+          "platform": "PC"
+        }
       ];
   
       const req = {
@@ -291,17 +297,18 @@ describe("getAllGames()", () => {
       };
       await gamesController.updateGame(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title,author,yearPublished,format");
+      expect(res.send).toHaveBeenCalledWith("Missing field error: title,developer,publisher,releaseDate,platform");
     });
 
     it("Fails to add to field to Game", async () => {
       const gameTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioGame",
-        },
+          "title": "World Of Monty Python",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "12/25/2022",
+          "platform": "PC"
+        }
       ];
   
       const req = {
@@ -327,11 +334,12 @@ describe("getAllGames()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const gameTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioGame",
-        },
+          "title": "World Of Monty Python",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "12/25/2022",
+          "platform": "PC"
+        }
       ];
       const req = {
         user: "mockUser",
@@ -348,14 +356,6 @@ describe("getAllGames()", () => {
 
   describe("Deletes the game", () => {
     it("Removes the game we added earler from the database", async () => {
-      // const gameTest = [
-      //   {
-      //     title: "The Fellowship of the Ring",
-      //     author: "J. R. R. Tolkien",
-      //     yearPublished: "1954",
-      //     format: "Paperback",
-      //   },
-      // ]; 
 
       const req = {
         user: "mockUser",
@@ -403,11 +403,12 @@ describe("getAllGames()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const gameTest = [
         {
-          title: "The Fellowship of the Ring",
-          author: "McKennah Palmer",
-          yearPublished: "1954",
-          format: "AudioGame",
-        },
+          "title": "World Of Monty Python",
+          "developer": "Blizzard Entertainment",
+          "publisher": "Blizzard Entertainment",
+          "releaseDate": "12/25/2022",
+          "platform": "PC"
+        }
       ];
       const req = {
         user: "mockUser",
