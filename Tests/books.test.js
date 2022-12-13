@@ -371,8 +371,7 @@ describe("getAllBooks()", () => {
       }));
 
       await booksController.deleteBook(req, res);
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith();
+      expect(res.status).toHaveBeenCalledWith(204);
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {

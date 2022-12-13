@@ -130,7 +130,7 @@ const deleteBook = async (req, res) => {
   }
 
   const bookId = new ObjectId(req.params.id);
-  
+
   // const response = await mongodb
   //   .getCollection("books")
   //   .deleteOne({ _id: bookId }, true);
@@ -148,7 +148,7 @@ const deleteBook = async (req, res) => {
     const response = await mongodb.getCollection("books").deleteOne({ _id: bookId }, true);
     if (response.acknowledged) {
       //res.setHeader("Content-Type", "application/json");
-      res.status(200).json(response);
+      res.status(204); //no content
     } else {
       res.status(400).send("Unknown error deleting book.");
       return;
