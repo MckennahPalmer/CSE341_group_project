@@ -347,10 +347,32 @@ describe("getAllBooks()", () => {
   });
 
   describe("Deletes the book", () => {
-    xit("Removes the book we added earler from the database", () => {
-      booksController.deleteBook(req, res);
+    it("Removes the book we added earler from the database", async () => {
+      // const bookTest = [
+      //   {
+      //     title: "The Fellowship of the Ring",
+      //     author: "J. R. R. Tolkien",
+      //     yearPublished: "1954",
+      //     format: "Paperback",
+      //   },
+      // ]; 
 
+      const req = {
+        user: "mockUser",
+        params: {id: "637ee05926a634d0f54729f8"},
+        // body: bookTest[0]
+      };
+
+      mongodb.getCollection = jest.fn(() => ({
+        deleteOne: jest.fn(() => ({
+          acknowledged: true,
+          toArray: () => Promise.resolve(bookTest),
+        })),
+      }));
+
+      await booksController.deleteBook(req, res);
       expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith();
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -360,17 +382,26 @@ describe("getAllBooks()", () => {
       expect(res.send).toHaveBeenCalledWith("Authentication failed.");
     });
 
-    xit("Responds with 400, missing field", async () => {
+    it("Responds with 400, Delete fails", async () => {
       const req = {
         user: "mockUser",
-        params: {},
+        params: {id: "637ee05926a634d0f54729f8"},
+        // body: bookTest[0]
       };
+
+      mongodb.getCollection = jest.fn(() => ({
+        deleteOne: jest.fn(() => ({
+          acknowledged: false,
+          toArray: () => Promise.resolve(bookTest),
+        })),
+      }));
+
       await booksController.deleteBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing book id.");
+      expect(res.send).toHaveBeenCalledWith("Unknown error deleting book.");
     });
 
-    xit("Responds with 500, the DB is not initialized", async () => {
+    it("Responds with 500, the DB is not initialized", async () => {
       const bookTest = [
         {
           title: "The Fellowship of the Ring",
@@ -389,7 +420,7 @@ describe("getAllBooks()", () => {
 
       await booksController.deleteBook(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while getting this book");
+      expect(res.send).toHaveBeenCalledWith("An error occurred while deleting this book");
     });
   });
 });

@@ -130,17 +130,34 @@ const deleteBook = async (req, res) => {
   }
 
   const bookId = new ObjectId(req.params.id);
-  const response = await mongodb
-    .getCollection("books")
-    .deleteOne({ _id: bookId }, true);
-  if (response.acknowledged) {
-    res.status(200).json(response);
-  } else {
-    res
-      .status(500)
-      .json(
-        response.error || "An error occurred while trying to delete the book."
-      );
+  
+  // const response = await mongodb
+  //   .getCollection("books")
+  //   .deleteOne({ _id: bookId }, true);
+  // if (response.acknowledged) {
+  //   res.status(200).json(response);
+  // } else {
+  //   res
+  //     .status(500)
+  //     .json(
+  //       response.error || "An error occurred while trying to delete the book."
+  //     );
+  // }
+
+  try {
+    const response = await mongodb.getCollection("books").deleteOne({ _id: bookId }, true);
+    if (response.acknowledged) {
+      //res.setHeader("Content-Type", "application/json");
+      res.status(200).json(response);
+    } else {
+      res.status(400).send("Unknown error deleting book.");
+      return;
+    }
+  } catch (error) {
+    res.status(500);
+    const msg = "An error occurred while deleting this book"
+    res.send(msg);
+    return;
   }
 };
 
