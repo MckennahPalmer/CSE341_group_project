@@ -80,27 +80,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "author": {
-                  "example": "any"
-                },
-                "yearPublished": {
-                  "example": "any"
-                },
-                "format": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -172,27 +151,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "author": {
-                  "example": "any"
-                },
-                "yearPublished": {
-                  "example": "any"
-                },
-                "format": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -279,30 +237,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "rating": {
-                  "example": "any"
-                },
-                "yearReleased": {
-                  "example": "any"
-                },
-                "duration": {
-                  "example": "any"
-                },
-                "format": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -374,30 +308,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "rating": {
-                  "example": "any"
-                },
-                "yearReleased": {
-                  "example": "any"
-                },
-                "duration": {
-                  "example": "any"
-                },
-                "format": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -484,36 +394,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "artist": {
-                  "example": "any"
-                },
-                "album": {
-                  "example": "any"
-                },
-                "label": {
-                  "example": "any"
-                },
-                "genre": {
-                  "example": "any"
-                },
-                "releaseDate": {
-                  "example": "any"
-                },
-                "numSongs": {
-                  "example": "any"
-                },
-                "format": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -585,36 +465,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "artist": {
-                  "example": "any"
-                },
-                "album": {
-                  "example": "any"
-                },
-                "label": {
-                  "example": "any"
-                },
-                "genre": {
-                  "example": "any"
-                },
-                "releaseDate": {
-                  "example": "any"
-                },
-                "numSongs": {
-                  "example": "any"
-                },
-                "format": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -701,30 +551,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "developer": {
-                  "example": "any"
-                },
-                "publisher": {
-                  "example": "any"
-                },
-                "releaseDate": {
-                  "example": "any"
-                },
-                "platform": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -796,30 +622,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "developer": {
-                  "example": "any"
-                },
-                "publisher": {
-                  "example": "any"
-                },
-                "releaseDate": {
-                  "example": "any"
-                },
-                "platform": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {

@@ -65,12 +65,14 @@ const addBook = async (req, res) => {
     return;
   }
 
-  const book = {
-    title: req.body.title,
-    author: req.body.author,
-    yearPublished: req.body.yearPublished,
-    format: req.body.format,
-  };
+  const book = validateFields(req, res);
+
+  // const book = {
+  //   title: req.body.title,
+  //   author: req.body.author,
+  //   yearPublished: req.body.yearPublished,
+  //   format: req.body.format,
+  // };
 
   try {
     const response = await mongodb.getCollection("books").insertOne(book);
@@ -109,12 +111,14 @@ const updateBook = async (req, res) => {
 
   const bookId = new ObjectId(req.params.id);
 
-  const book = {
-    title: req.body.title,
-    author: req.body.author,
-    yearPublished: req.body.yearPublished,
-    format: req.body.format,
-  };
+  const book = validateFields(req, res);
+
+  // const book = {
+  //   title: req.body.title,
+  //   author: req.body.author,
+  //   yearPublished: req.body.yearPublished,
+  //   format: req.body.format,
+  // };
 
   try {
     const response = await mongodb
