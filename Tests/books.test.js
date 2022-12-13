@@ -1,4 +1,3 @@
-const { title } = require("process");
 const booksController = require("../controllers/books");
 const mongodb = require("../db/connect");
 
@@ -114,20 +113,6 @@ describe("getAllBooks()", () => {
   describe("Add new book", () => {
 
     it("Adds book and return successful code", async () => {
-      const req = {
-        user: "mockUser",
-        params: {}
-      }; 
-
-      /*const book = [
-        {
-          title: req.body.title,
-          author: req.body.author,
-          yearPublished: req.body.yearPublished,
-          format: req.body.format
-        }
-      ]*/
-
       const bookTest = [
         {
           title: "The Fellowship of the Ring",
@@ -135,30 +120,23 @@ describe("getAllBooks()", () => {
           yearPublished: "1954",
           format: "Paperback",
         },
-      ];
+      ]; 
 
-      // const book = {
-      //   title: req.body.title,
-      //   author: req.body.author,
-      //   yearPublished: req.body.yearPublished,
-      //   format: req.body.format
-      // }
-
-      await booksController.addBook(req, res);
+      const req = {
+        user: "mockUser",
+        body: bookTest[0]
+      };
 
       mongodb.getCollection = jest.fn(() => ({
         insertOne: jest.fn(() => ({
+          acknowledged: true,
           toArray: () => Promise.resolve(bookTest), // setting the result of the query to the contents of bookOne
         })),
       }));
 
-      //await booksController.addBook(req, res);
-      expect(res.setHeader).toBe(
-        "Content-Type",
-        "application/json"
-      );
-      expect(res.status).toBe(200);
-      expect(res.json).toBe(bookTest[0]);
+      await booksController.addBook(req, res);
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(bookTest[0]);
     });
       
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -168,20 +146,76 @@ describe("getAllBooks()", () => {
       expect(res.send).toHaveBeenCalledWith("Authentication failed.");
     });
 
-    xit("Responds with 400, missing field", async () => {
+    it("Responds with 400, missing body", async () => {
       const req = {
-        user: "mockUser",
-        params: {},
+        user: "mockUser"
       };
+      
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing book id.");
+      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a book to add in the body.");
     });
 
-    xit("Responds with 500, the DB is not initialized", async () => {
+    it("Responds with 400, missing field", async () => {
+      const bookTest = [
+        {
+          author: "J. R. R. Tolkien",
+          yearPublished: "1954",
+          format: "Paperback",
+        },
+      ]; 
+
       const req = {
         user: "mockUser",
-        params: {},
+        body: bookTest[0]
+      };
+      
+      await booksController.addBook(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith("Missing field error: title");
+    });
+
+    it("Fails to add to book to DB", async () => {
+      const bookTest = [
+        {
+          title: "The Fellowship of the Ring",
+          author: "J. R. R. Tolkien",
+          yearPublished: "1954",
+          format: "Paperback",
+        },
+      ]; 
+
+      const req = {
+        user: "mockUser",
+        body: bookTest[0]
+      };
+
+      mongodb.getCollection = jest.fn(() => ({
+        insertOne: jest.fn(() => ({
+          acknowledged: false,
+          toArray: () => Promise.resolve(bookTest), // setting the result of the query to the contents of bookOne
+        })),
+      }));
+
+      await booksController.addBook(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith(
+        "Unknown error adding book."
+      );
+    });
+
+    it("Responds with 500, the DB is not initialized", async () => {
+      const bookTest = [
+        {
+          title: "The Fellowship of the Ring",
+          author: "J. R. R. Tolkien",
+          yearPublished: "1954",
+          format: "Paperback",
+        },
+      ]; 
+      const req = {
+        user: "mockUser",
+        body: bookTest[0],
       };
       const res = mockResponse();
 
@@ -194,10 +228,32 @@ describe("getAllBooks()", () => {
   });
 
   describe("Update the book", () => {
-    xit("changes some info and saves it", () => {
-      booksController.updateBook(req, res);
+    it("changes some info and saves it", async () => {
+      const bookTest = [
+        {
+          title: "The Fellowship of the Ring",
+          author: "McKennah Palmer",
+          yearPublished: "1954",
+          format: "AudioBook",
+        },
+      ];
+  
+      const req = {
+        user: "mockUser",
+        params: {id: "637ee05926a634d0f54729f8"},
+        body: bookTest[0]
+      };
+  
+      mongodb.getCollection = jest.fn(() => ({
+        replaceOne: jest.fn(() => ({
+          acknowledged: true,
+          toArray: () => Promise.resolve(bookTest),
+        })),
+      }));
 
+      await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(bookTest[0]);
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -207,20 +263,80 @@ describe("getAllBooks()", () => {
       expect(res.send).toHaveBeenCalledWith("Authentication failed.");
     });
 
-    xit("Responds with 400, missing field", async () => {
+    it("Responds with 400, missing parameter book id", async () => {
       const req = {
         user: "mockUser",
         params: {},
       };
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing book id.");
+      expect(res.send).toHaveBeenCalledWith("Missing param book id.");
     });
 
-    xit("Responds with 500, the DB is not initialized", async () => {
+    it("Responds with 400, missing body", async () => {
       const req = {
         user: "mockUser",
-        params: {},
+        params: {id: "637ee05926a634d0f54729f8"},
+      };
+      await booksController.updateBook(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a body.");
+    });
+
+    it("Responds with 400, missing fields", async () => {
+      const req = {
+        user: "mockUser",
+        params: {id: "637ee05926a634d0f54729f8"},
+        body: {}
+      };
+      await booksController.updateBook(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith("Missing field error: title,author,yearPublished,format");
+    });
+
+    it("Fails to add to field to Book", async () => {
+      const bookTest = [
+        {
+          title: "The Fellowship of the Ring",
+          author: "McKennah Palmer",
+          yearPublished: "1954",
+          format: "AudioBook",
+        },
+      ];
+  
+      const req = {
+        user: "mockUser",
+        params: {id: "637ee05926a634d0f54729f8"},
+        body: bookTest[0]
+      };
+  
+      mongodb.getCollection = jest.fn(() => ({
+        replaceOne: jest.fn(() => ({
+          acknowledged: false,
+          toArray: () => Promise.resolve(bookTest),
+        })),
+      }));
+
+      await booksController.updateBook(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith(
+        "Unknown error updating book."
+      );
+    });
+
+    it("Responds with 500, the DB is not initialized", async () => {
+      const bookTest = [
+        {
+          title: "The Fellowship of the Ring",
+          author: "McKennah Palmer",
+          yearPublished: "1954",
+          format: "AudioBook",
+        },
+      ];
+      const req = {
+        user: "mockUser",
+        params: {id: "637ee05926a634d0f54729f8"},
+        body: bookTest[0]
       };
       const res = mockResponse();
 
@@ -255,10 +371,20 @@ describe("getAllBooks()", () => {
     });
 
     xit("Responds with 500, the DB is not initialized", async () => {
+      const bookTest = [
+        {
+          title: "The Fellowship of the Ring",
+          author: "McKennah Palmer",
+          yearPublished: "1954",
+          format: "AudioBook",
+        },
+      ];
       const req = {
         user: "mockUser",
-        params: {},
+        params: {id: "637ee05926a634d0f54729f8"},
+        body: bookTest[0]
       };
+
       const res = mockResponse();
 
       await booksController.deleteBook(req, res);

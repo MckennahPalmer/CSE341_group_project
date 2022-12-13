@@ -57,49 +57,68 @@ const addBook = async (req, res) => {
     res.send("Authentication failed.");
     return;
   }
+  
+  if (!req.body) {
+    res.status(400).send(`Invalid request, please provide a book to add in the body.`);
+    return;
+  }
 
-  const book = {
-    title: req.body.title,
-    author: req.body.author,
-    yearPublished: req.body.yearPublished,
-    format: req.body.format,
-  };
-  const response = await mongodb
-    .getCollection("books")
-    .insertOne(book);
-  if (response.acknowledged) {
-    res.status(201).json(response);
-  } else {
-    res
-      .status(500)
-      .json(response.error || "An error occurred while adding a book.");
+  const book = validateFields(req, res);
+
+  try {
+    const response = await mongodb.getCollection("books").insertOne(book);
+    if (response.acknowledged) {
+      response.toArray().then((lists) => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(201).json(lists[0]);
+      });
+    } else {
+      res.status(400).send("Unknown error adding book.");
+      return;
+    }
+  } catch (error) {
+    res.status(500);
+    const msg = "An error occurred while getting this book"
+    res.send(msg);
+    return;
   }
 };
 
 const updateBook = async (req, res) => {
-  // console.log("Update book information by ID");
   if (!req.user) {
     res.status(401);
     res.send("Authentication failed.");
     return;
   }
+  if (!req.params.id) {
+    res.status(400).send("Missing param book id.");
+    return;
+  } 
+
+  if (!req.body) {
+    res.status(400).send(`Invalid request, please provide a body.`);
+    return;
+  }
 
   const bookId = new ObjectId(req.params.id);
-  const book = {
-    title: req.body.title,
-    author: req.body.author,
-    yearPublished: req.body.yearPublished,
-    format: req.body.format,
-  };
-  const response = await mongodb
-    .getCollection("books")
-    .replaceOne({ _id: bookId }, book);
-  if (response.acknowledged) {
-    res.status(204).json(response);
-  } else {
-    res
-      .status(500)
-      .json(response.error || "An error occurred while updating the book.");
+  const book = validateFields(req, res);
+
+  try {
+    const response = await mongodb.getCollection("books").replaceOne({ _id: bookId }, book);
+    if (response.acknowledged) {
+      response.toArray().then((lists) => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(200).json(lists[0]);
+      });
+    } else {
+      res.status(400).send("Unknown error updating book.");
+      return;
+    }
+  } catch (error) {
+    res.status(500);
+    const msg = "An error occurred while getting this book"
+    res.send(msg);
+    return;
   }
 };
 
@@ -132,3 +151,21 @@ module.exports = {
   updateBook,
   deleteBook,
 };
+
+function validateFields(req, res) {
+  let book;
+  const validFields = ["title", "author", "yearPublished", "format"];
+  const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
+  if (missingFields.length > 0) {
+    res.status(400).send(`Missing field error: ${missingFields}`);
+    return;
+  } else {
+    book = {
+      title: req.body.title,
+      author: req.body.author,
+      yearPublished: req.body.yearPublished,
+      format: req.body.format,
+    };
+  }
+  return book;
+}
