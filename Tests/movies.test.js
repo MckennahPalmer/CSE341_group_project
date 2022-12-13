@@ -131,13 +131,13 @@ describe("getAllMovies()", () => {
       mongodb.getCollection = jest.fn(() => ({
         insertOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(movieTest), // setting the result of the query to the contents of movieOne
+          insertedId: "123456789123"
         })),
       }));
 
       await moviesController.addMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(movieTest[0]);
+      expect(res.json).toHaveBeenCalledWith({id: "123456789123"});
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -157,26 +157,6 @@ describe("getAllMovies()", () => {
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a movie to add in the body."
       );
-    });
-
-    it("Responds with 400, missing field", async () => {
-      const movieTest = [
-        {
-          rating: "PG-13",
-          yearReleased: "2010",
-          duration: "2h 26m",
-          format: "DVD",
-        },
-      ];
-
-      const req = {
-        user: "mockUser",
-        body: movieTest[0],
-      };
-
-      await moviesController.addMovie(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title");
     });
 
     it("Fails to add to movie to DB", async () => {
@@ -226,7 +206,7 @@ describe("getAllMovies()", () => {
       await moviesController.addMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this movie"
+        "An error occurred while adding this movie"
       );
     });
   });
@@ -252,13 +232,12 @@ describe("getAllMovies()", () => {
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(movieTest),
         })),
       }));
 
       await moviesController.updateMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(movieTest[0]);
+      expect(res.json).toHaveBeenCalledWith({ id: "637ee05926a634d0f54729f8" });
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -287,19 +266,6 @@ describe("getAllMovies()", () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a body."
-      );
-    });
-
-    it("Responds with 400, missing fields", async () => {
-      const req = {
-        user: "mockUser",
-        params: { id: "637ee05926a634d0f54729f8" },
-        body: {},
-      };
-      await moviesController.updateMovie(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Missing field error: title,rating,yearReleased,duration,format"
       );
     });
 
@@ -352,7 +318,7 @@ describe("getAllMovies()", () => {
       await moviesController.updateMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this movie"
+        "An error occurred while updating this movie"
       );
     });
   });
@@ -362,7 +328,6 @@ describe("getAllMovies()", () => {
       const req = {
         user: "mockUser",
         params: { id: "637ee05926a634d0f54729f8" },
-        // body: movieTest[0]
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -387,7 +352,6 @@ describe("getAllMovies()", () => {
       const req = {
         user: "mockUser",
         params: { id: "637ee05926a634d0f54729f8" },
-        // body: movieTest[0]
       };
 
       mongodb.getCollection = jest.fn(() => ({

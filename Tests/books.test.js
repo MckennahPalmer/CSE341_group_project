@@ -129,13 +129,13 @@ describe("getAllBooks()", () => {
       mongodb.getCollection = jest.fn(() => ({
         insertOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(bookTest), // setting the result of the query to the contents of bookOne
+          insertedId: '123456789123', // return from mongo
         })),
       }));
 
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(bookTest[0]);
+      expect(res.json).toHaveBeenCalledWith({id: '123456789123'});
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -155,25 +155,6 @@ describe("getAllBooks()", () => {
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a book to add in the body."
       );
-    });
-
-    it("Responds with 400, missing field", async () => {
-      const bookTest = [
-        {
-          author: "J. R. R. Tolkien",
-          yearPublished: "1954",
-          format: "Paperback",
-        },
-      ];
-
-      const req = {
-        user: "mockUser",
-        body: bookTest[0],
-      };
-
-      await booksController.addBook(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title");
     });
 
     it("Fails to add to book to DB", async () => {
@@ -221,7 +202,7 @@ describe("getAllBooks()", () => {
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this book"
+        "An error occurred while adding this book"
       );
     });
   });
@@ -246,13 +227,12 @@ describe("getAllBooks()", () => {
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(bookTest),
         })),
       }));
 
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(bookTest[0]);
+      expect(res.json).toHaveBeenCalledWith({id: "637ee05926a634d0f54729f8"});
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -281,19 +261,6 @@ describe("getAllBooks()", () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a body."
-      );
-    });
-
-    it("Responds with 400, missing fields", async () => {
-      const req = {
-        user: "mockUser",
-        params: { id: "637ee05926a634d0f54729f8" },
-        body: {},
-      };
-      await booksController.updateBook(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Missing field error: title,author,yearPublished,format"
       );
     });
 
@@ -344,7 +311,7 @@ describe("getAllBooks()", () => {
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this book"
+        "An error occurred while updating this book"
       );
     });
   });

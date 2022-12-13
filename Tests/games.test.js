@@ -131,13 +131,13 @@ describe("getAllGames()", () => {
       mongodb.getCollection = jest.fn(() => ({
         insertOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(gameTest), // setting the result of the query to the contents of gameOne
+          insertedId: "123456789123",
         })),
       }));
 
       await gamesController.addGame(req, res);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(gameTest[0]);
+      expect(res.json).toHaveBeenCalledWith({ id: "123456789123" });
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -157,26 +157,6 @@ describe("getAllGames()", () => {
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a game to add in the body."
       );
-    });
-
-    it("Responds with 400, missing field", async () => {
-      const gameTest = [
-        {
-          developer: "Blizzard Entertainment",
-          publisher: "Blizzard Entertainment",
-          releaseDate: "11/23/2004",
-          platform: "PC",
-        },
-      ];
-
-      const req = {
-        user: "mockUser",
-        body: gameTest[0],
-      };
-
-      await gamesController.addGame(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title");
     });
 
     it("Fails to add to game to DB", async () => {
@@ -226,7 +206,7 @@ describe("getAllGames()", () => {
       await gamesController.addGame(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this game"
+        "An error occurred while adding this game"
       );
     });
   });
@@ -252,13 +232,12 @@ describe("getAllGames()", () => {
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(gameTest),
         })),
       }));
 
       await gamesController.updateGame(req, res);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(gameTest[0]);
+      expect(res.json).toHaveBeenCalledWith({ id: "637ee05926a634d0f54729f8" });
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -287,19 +266,6 @@ describe("getAllGames()", () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a body."
-      );
-    });
-
-    it("Responds with 400, missing fields", async () => {
-      const req = {
-        user: "mockUser",
-        params: { id: "637ee05926a634d0f54729f8" },
-        body: {},
-      };
-      await gamesController.updateGame(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Missing field error: title,developer,publisher,releaseDate,platform"
       );
     });
 
@@ -352,7 +318,7 @@ describe("getAllGames()", () => {
       await gamesController.updateGame(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this game"
+        "An error occurred while updating this game"
       );
     });
   });

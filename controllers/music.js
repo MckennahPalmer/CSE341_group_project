@@ -67,32 +67,28 @@ const addMusic = async (req, res) => {
     return;
   }
 
-  const music = validateFields(req, res);
-
-  // const music = {
-  //   artist: req.body.artist,
-  //   album: req.body.album,
-  //   label: req.body.label,
-  //   genre: req.body.genre,
-  //   releaseDate: req.body.releaseDate,
-  //   numSongs: req.body.numSongs,
-  //   format: req.body.format,
-  // };
+  const music = {
+    artist: req.body.artist,
+    album: req.body.album,
+    label: req.body.label,
+    genre: req.body.genre,
+    releaseDate: req.body.releaseDate,
+    numSongs: req.body.numSongs,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb.getCollection("music").insertOne(music);
     if (response.acknowledged) {
-      response.toArray().then((lists) => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(201).json(lists[0]);
-      });
+      res.setHeader("Content-Type", "application/json");
+      res.status(201).json({ id: response.insertedId });
     } else {
       res.status(400).send("Unknown error adding music.");
       return;
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this music";
+    const msg = "An error occurred while adding this music";
     res.send(msg);
     return;
   }
@@ -116,34 +112,30 @@ const updateMusic = async (req, res) => {
 
   const musicId = new ObjectId(req.params.id);
 
-  const music = validateFields(req, res);
-
-  // const music = {
-  //   artist: req.body.artist,
-  //   album: req.body.album,
-  //   label: req.body.label,
-  //   genre: req.body.genre,
-  //   releaseDate: req.body.releaseDate,
-  //   numSongs: req.body.numSongs,
-  //   format: req.body.format,
-  // };
+  const music = {
+    artist: req.body.artist,
+    album: req.body.album,
+    label: req.body.label,
+    genre: req.body.genre,
+    releaseDate: req.body.releaseDate,
+    numSongs: req.body.numSongs,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb
       .getCollection("music")
       .replaceOne({ _id: musicId }, music);
     if (response.acknowledged) {
-      response.toArray().then((lists) => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json(lists[0]);
-      });
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json({ id: req.params.id });
     } else {
       res.status(400).send("Unknown error updating music.");
       return;
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this music";
+    const msg = "An error occurred while updating this music";
     res.send(msg);
     return;
   }
@@ -158,25 +150,11 @@ const deleteMusic = async (req, res) => {
 
   const musicId = new ObjectId(req.params.id);
 
-  // const response = await mongodb
-  //   .getCollection("music")
-  //   .deleteOne({ _id: musicId }, true);
-  // if (response.acknowledged) {
-  //   res.status(200).json(response);
-  // } else {
-  //   res
-  //     .status(500)
-  //     .json(
-  //       response.error || "An error occurred while trying to delete the music."
-  //     );
-  // }
-
   try {
     const response = await mongodb
       .getCollection("music")
       .deleteOne({ _id: musicId }, true);
     if (response.acknowledged) {
-      //res.setHeader("Content-Type", "application/json");
       res.status(204); //no content
     } else {
       res.status(400).send("Unknown error deleting music.");
@@ -198,33 +176,3 @@ module.exports = {
   deleteMusic,
 };
 
-function validateFields(req, res) {
-  let music;
-  const validFields = [
-    "artist",
-    "album",
-    "label",
-    "genre",
-    "releaseDate",
-    "numSongs",
-    "format",
-  ];
-  const missingFields = validFields.filter(
-    (val) => !Object.keys(req.body).includes(val) || req.body[val] === ""
-  );
-  if (missingFields.length > 0) {
-    res.status(400).send(`Missing field error: ${missingFields}`);
-    return;
-  } else {
-    music = {
-      artist: req.body.artist,
-      album: req.body.album,
-      label: req.body.label,
-      genre: req.body.genre,
-      releaseDate: req.body.releaseDate,
-      numSongs: req.body.numSongs,
-      format: req.body.format,
-    };
-  }
-  return music;
-}

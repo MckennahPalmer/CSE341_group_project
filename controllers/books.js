@@ -65,29 +65,25 @@ const addBook = async (req, res) => {
     return;
   }
 
-  const book = validateFields(req, res);
-
-  // const book = {
-  //   title: req.body.title,
-  //   author: req.body.author,
-  //   yearPublished: req.body.yearPublished,
-  //   format: req.body.format,
-  // };
+  const book = {
+    title: req.body.title,
+    author: req.body.author,
+    yearPublished: req.body.yearPublished,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb.getCollection("books").insertOne(book);
     if (response.acknowledged) {
-      response.toArray().then((lists) => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(201).json(lists[0]);
-      });
+      res.setHeader("Content-Type", "application/json");
+      res.status(201).json({ id: response.insertedId });
     } else {
       res.status(400).send("Unknown error adding book.");
       return;
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this book";
+    const msg = "An error occurred while adding this book";
     res.send(msg);
     return;
   }
@@ -111,31 +107,27 @@ const updateBook = async (req, res) => {
 
   const bookId = new ObjectId(req.params.id);
 
-  const book = validateFields(req, res);
-
-  // const book = {
-  //   title: req.body.title,
-  //   author: req.body.author,
-  //   yearPublished: req.body.yearPublished,
-  //   format: req.body.format,
-  // };
+  const book = {
+    title: req.body.title,
+    author: req.body.author,
+    yearPublished: req.body.yearPublished,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb
       .getCollection("books")
       .replaceOne({ _id: bookId }, book);
     if (response.acknowledged) {
-      response.toArray().then((lists) => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json(lists[0]);
-      });
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json({ id: req.params.id });
     } else {
       res.status(400).send("Unknown error updating book.");
       return;
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this book";
+    const msg = "An error occurred while updating this book";
     res.send(msg);
     return;
   }
@@ -150,25 +142,11 @@ const deleteBook = async (req, res) => {
 
   const bookId = new ObjectId(req.params.id);
 
-  // const response = await mongodb
-  //   .getCollection("books")
-  //   .deleteOne({ _id: bookId }, true);
-  // if (response.acknowledged) {
-  //   res.status(200).json(response);
-  // } else {
-  //   res
-  //     .status(500)
-  //     .json(
-  //       response.error || "An error occurred while trying to delete the book."
-  //     );
-  // }
-
   try {
     const response = await mongodb
       .getCollection("books")
       .deleteOne({ _id: bookId }, true);
     if (response.acknowledged) {
-      //res.setHeader("Content-Type", "application/json");
       res.status(204); //no content
     } else {
       res.status(400).send("Unknown error deleting book.");
@@ -189,23 +167,3 @@ module.exports = {
   updateBook,
   deleteBook,
 };
-
-function validateFields(req, res) {
-  let book;
-  const validFields = ["title", "author", "yearPublished", "format"];
-  const missingFields = validFields.filter(
-    (val) => !Object.keys(req.body).includes(val) || req.body[val] === ""
-  );
-  if (missingFields.length > 0) {
-    res.status(400).send(`Missing field error: ${missingFields}`);
-    return;
-  } else {
-    book = {
-      title: req.body.title,
-      author: req.body.author,
-      yearPublished: req.body.yearPublished,
-      format: req.body.format,
-    };
-  }
-  return book;
-}

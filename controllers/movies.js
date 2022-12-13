@@ -67,30 +67,26 @@ const addMovie = async (req, res) => {
     return;
   }
 
-  const movie = validateFields(req, res);
-
-  // const movie = {
-  //   title: req.body.title,
-  //   rating: req.body.rating,
-  //   yearReleased: req.body.yearReleased,
-  //   duration: req.body.duration,
-  //   format: req.body.format,
-  // };
+  const movie = {
+    title: req.body.title,
+    rating: req.body.rating,
+    yearReleased: req.body.yearReleased,
+    duration: req.body.duration,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb.getCollection("movies").insertOne(movie);
     if (response.acknowledged) {
-      response.toArray().then((lists) => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(201).json(lists[0]);
-      });
+      res.setHeader("Content-Type", "application/json");
+      res.status(201).json({id: response.insertedId});
     } else {
       res.status(400).send("Unknown error adding movie.");
       return;
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this movie";
+    const msg = "An error occurred while adding this movie";
     res.send(msg);
     return;
   }
@@ -114,32 +110,28 @@ const updateMovie = async (req, res) => {
 
   const movieId = new ObjectId(req.params.id);
 
-  const movie = validateFields(req, res);
-
-  // const movie = {
-  //   title: req.body.title,
-  //   rating: req.body.rating,
-  //   yearReleased: req.body.yearReleased,
-  //   duration: req.body.duration,
-  //   format: req.body.format,
-  // };
+  const movie = {
+    title: req.body.title,
+    rating: req.body.rating,
+    yearReleased: req.body.yearReleased,
+    duration: req.body.duration,
+    format: req.body.format,
+  };
 
   try {
     const response = await mongodb
       .getCollection("movies")
       .replaceOne({ _id: movieId }, movie);
     if (response.acknowledged) {
-      response.toArray().then((lists) => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json(lists[0]);
-      });
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json({id: req.params.id});
     } else {
       res.status(400).send("Unknown error updating movie.");
       return;
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this movie";
+    const msg = "An error occurred while updating this movie";
     res.send(msg);
     return;
   }
@@ -154,25 +146,11 @@ const deleteMovie = async (req, res) => {
 
   const movieId = new ObjectId(req.params.id);
 
-  // const response = await mongodb
-  //   .getCollection("movies")
-  //   .deleteOne({ _id: movieId }, true);
-  // if (response.acknowledged) {
-  //   res.status(200).json(response);
-  // } else {
-  //   res
-  //     .status(500)
-  //     .json(
-  //       response.error || "An error occurred while trying to delete the movie."
-  //     );
-  // }
-
   try {
     const response = await mongodb
       .getCollection("movies")
       .deleteOne({ _id: movieId }, true);
     if (response.acknowledged) {
-      //res.setHeader("Content-Type", "application/json");
       res.status(204); //no content
     } else {
       res.status(400).send("Unknown error deleting movie.");
@@ -193,24 +171,3 @@ module.exports = {
   updateMovie,
   deleteMovie,
 };
-
-function validateFields(req, res) {
-  let movie;
-  const validFields = ["title", "rating", "yearReleased", "duration", "format"];
-  const missingFields = validFields.filter(
-    (val) => !Object.keys(req.body).includes(val) || req.body[val] === ""
-  );
-  if (missingFields.length > 0) {
-    res.status(400).send(`Missing field error: ${missingFields}`);
-    return;
-  } else {
-    movie = {
-      title: req.body.title,
-      rating: req.body.rating,
-      yearReleased: req.body.yearReleased,
-      duration: req.body.duration,
-      format: req.body.format,
-    };
-  }
-  return movie;
-}

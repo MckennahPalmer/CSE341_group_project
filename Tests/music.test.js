@@ -135,13 +135,13 @@ describe("getAllMusic()", () => {
       mongodb.getCollection = jest.fn(() => ({
         insertOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(musicTest), // setting the result of the query to the contents of musicOne
+          insertedId: "123456789123"
         })),
       }));
 
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(musicTest[0]);
+      expect(res.json).toHaveBeenCalledWith({id: "123456789123"});
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -161,28 +161,6 @@ describe("getAllMusic()", () => {
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a music to add in the body."
       );
-    });
-
-    it("Responds with 400, missing field", async () => {
-      const musicTest = [
-        {
-          album: "Sheer Heart Attack",
-          label: "Elektra Music",
-          genre: "Rock",
-          releaseDate: "11/08/1974",
-          numSongs: "13",
-          format: "CD",
-        },
-      ];
-
-      const req = {
-        user: "mockUser",
-        body: musicTest[0],
-      };
-
-      await musicController.addMusic(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: artist");
     });
 
     it("Fails to add to music to DB", async () => {
@@ -236,7 +214,7 @@ describe("getAllMusic()", () => {
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this music"
+        "An error occurred while adding this music"
       );
     });
   });
@@ -264,13 +242,12 @@ describe("getAllMusic()", () => {
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
-          toArray: () => Promise.resolve(musicTest),
         })),
       }));
 
       await musicController.updateMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(musicTest[0]);
+      expect(res.json).toHaveBeenCalledWith({ id: "637ee05926a634d0f54729f8" });
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -299,19 +276,6 @@ describe("getAllMusic()", () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith(
         "Invalid request, please provide a body."
-      );
-    });
-
-    it("Responds with 400, missing fields", async () => {
-      const req = {
-        user: "mockUser",
-        params: { id: "637ee05926a634d0f54729f8" },
-        body: {},
-      };
-      await musicController.updateMusic(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Missing field error: artist,album,label,genre,releaseDate,numSongs,format"
       );
     });
 
@@ -368,7 +332,7 @@ describe("getAllMusic()", () => {
       await musicController.updateMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith(
-        "An error occurred while getting this music"
+        "An error occurred while updating this music"
       );
     });
   });
