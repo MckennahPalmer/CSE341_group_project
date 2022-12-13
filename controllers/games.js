@@ -152,8 +152,8 @@ const deleteGame = async (req, res) => {
       .getCollection("games")
       .deleteOne({ _id: gameId }, true);
     if (response.acknowledged) {
-      //res.setHeader("Content-Type", "application/json");
-      res.status(204); //no content
+      res.status(204).send("").send(""); //no content
+      return;
     } else {
       res.status(400).send("Unknown error deleting game.");
       return;

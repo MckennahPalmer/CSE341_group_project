@@ -155,7 +155,8 @@ const deleteMusic = async (req, res) => {
       .getCollection("music")
       .deleteOne({ _id: musicId }, true);
     if (response.acknowledged) {
-      res.status(204); //no content
+      res.status(204).send(""); //no content
+      return;
     } else {
       res.status(400).send("Unknown error deleting music.");
       return;

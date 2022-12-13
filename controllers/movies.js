@@ -151,7 +151,8 @@ const deleteMovie = async (req, res) => {
       .getCollection("movies")
       .deleteOne({ _id: movieId }, true);
     if (response.acknowledged) {
-      res.status(204); //no content
+      res.status(204).send(""); //no content
+      return;
     } else {
       res.status(400).send("Unknown error deleting movie.");
       return;

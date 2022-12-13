@@ -147,7 +147,8 @@ const deleteBook = async (req, res) => {
       .getCollection("books")
       .deleteOne({ _id: bookId }, true);
     if (response.acknowledged) {
-      res.status(204); //no content
+      res.status(204).send(""); //no content
+      return;
     } else {
       res.status(400).send("Unknown error deleting book.");
       return;
