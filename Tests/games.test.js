@@ -41,12 +41,12 @@ describe("getAllGames()", () => {
 
       const gameOne = [
         {
-          "title": "World Of Warcraft",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "11/23/2004",
-          "platform": "PC"
-        }
+          title: "World Of Warcraft",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "11/23/2004",
+          platform: "PC",
+        },
       ];
 
       mongodb.getCollection = jest.fn(() => ({
@@ -112,21 +112,20 @@ describe("getAllGames()", () => {
   });
 
   describe("Add new game", () => {
-
     it("Adds game and return successful code", async () => {
       const gameTest = [
         {
-          "title": "World Of Warcraft",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "11/23/2004",
-          "platform": "PC"
-        }
-      ]; 
+          title: "World Of Warcraft",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "11/23/2004",
+          platform: "PC",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: gameTest[0]
+        body: gameTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -140,7 +139,7 @@ describe("getAllGames()", () => {
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(gameTest[0]);
     });
-      
+
     it("Responds with 401, 'Authentication failed.'", async () => {
       await gamesController.addGame(req, res);
       expect(res.status).toHaveBeenCalledWith(401);
@@ -150,12 +149,14 @@ describe("getAllGames()", () => {
 
     it("Responds with 400, missing body", async () => {
       const req = {
-        user: "mockUser"
+        user: "mockUser",
       };
-      
+
       await gamesController.addGame(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a game to add in the body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a game to add in the body."
+      );
     });
 
     it("Responds with 400, missing field", async () => {
@@ -164,15 +165,15 @@ describe("getAllGames()", () => {
           developer: "Blizzard Entertainment",
           publisher: "Blizzard Entertainment",
           releaseDate: "11/23/2004",
-          platform: "PC"
-        }
-      ]; 
+          platform: "PC",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: gameTest[0]
+        body: gameTest[0],
       };
-      
+
       await gamesController.addGame(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith("Missing field error: title");
@@ -181,17 +182,17 @@ describe("getAllGames()", () => {
     it("Fails to add to game to DB", async () => {
       const gameTest = [
         {
-          "title": "World Of Warcraft",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "11/23/2004",
-          "platform": "PC"
-        }
-      ]; 
+          title: "World Of Warcraft",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "11/23/2004",
+          platform: "PC",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: gameTest[0]
+        body: gameTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -203,21 +204,19 @@ describe("getAllGames()", () => {
 
       await gamesController.addGame(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error adding game."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error adding game.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
       const gameTest = [
         {
-          "title": "World Of Warcraft",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "11/23/2004",
-          "platform": "PC"
-        }
-      ]; 
+          title: "World Of Warcraft",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "11/23/2004",
+          platform: "PC",
+        },
+      ];
       const req = {
         user: "mockUser",
         body: gameTest[0],
@@ -236,20 +235,20 @@ describe("getAllGames()", () => {
     it("changes some info and saves it", async () => {
       const gameTest = [
         {
-          "title": "World Of Monty Python",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "12/25/2022",
-          "platform": "PC"
-        }
+          title: "World Of Monty Python",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "12/25/2022",
+          platform: "PC",
+        },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: gameTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: gameTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
@@ -282,41 +281,45 @@ describe("getAllGames()", () => {
     it("Responds with 400, missing body", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
       };
       await gamesController.updateGame(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a body."
+      );
     });
 
     it("Responds with 400, missing fields", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: {}
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: {},
       };
       await gamesController.updateGame(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title,developer,publisher,releaseDate,platform");
+      expect(res.send).toHaveBeenCalledWith(
+        "Missing field error: title,developer,publisher,releaseDate,platform"
+      );
     });
 
     it("Fails to add to field to Game", async () => {
       const gameTest = [
         {
-          "title": "World Of Monty Python",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "12/25/2022",
-          "platform": "PC"
-        }
+          title: "World Of Monty Python",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "12/25/2022",
+          platform: "PC",
+        },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: gameTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: gameTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: false,
@@ -326,40 +329,39 @@ describe("getAllGames()", () => {
 
       await gamesController.updateGame(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error updating game."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error updating game.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
       const gameTest = [
         {
-          "title": "World Of Monty Python",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "12/25/2022",
-          "platform": "PC"
-        }
+          title: "World Of Monty Python",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "12/25/2022",
+          platform: "PC",
+        },
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: gameTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: gameTest[0],
       };
       const res = mockResponse();
 
       await gamesController.updateGame(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while getting this game");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while getting this game"
+      );
     });
   });
 
   describe("Deletes the game", () => {
     it("Removes the game we added earler from the database", async () => {
-
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: gameTest[0]
       };
 
@@ -384,7 +386,7 @@ describe("getAllGames()", () => {
     it("Responds with 400, Delete fails", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: gameTest[0]
       };
 
@@ -403,24 +405,26 @@ describe("getAllGames()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const gameTest = [
         {
-          "title": "World Of Monty Python",
-          "developer": "Blizzard Entertainment",
-          "publisher": "Blizzard Entertainment",
-          "releaseDate": "12/25/2022",
-          "platform": "PC"
-        }
+          title: "World Of Monty Python",
+          developer: "Blizzard Entertainment",
+          publisher: "Blizzard Entertainment",
+          releaseDate: "12/25/2022",
+          platform: "PC",
+        },
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: gameTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: gameTest[0],
       };
 
       const res = mockResponse();
 
       await gamesController.deleteGame(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while deleting this Game");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while deleting this Game"
+      );
     });
   });
 });

@@ -41,12 +41,12 @@ describe("getAllMovies()", () => {
 
       const movieOne = [
         {
-          "title": "Raiders of the Lost Ark",
-          "rating": "PG",
-          "yearReleased": "06/12/1981",
-          "duration": "1h 34m",
-          "format": "DVD"
-        }
+          title: "Raiders of the Lost Ark",
+          rating: "PG",
+          yearReleased: "06/12/1981",
+          duration: "1h 34m",
+          format: "DVD",
+        },
       ];
 
       mongodb.getCollection = jest.fn(() => ({
@@ -112,21 +112,20 @@ describe("getAllMovies()", () => {
   });
 
   describe("Add new movie", () => {
-
     it("Adds movie and return successful code", async () => {
       const movieTest = [
         {
-          "title": "Harry Potter and the Deathly Hallows part 1",
-          "rating": "PG-13",
-          "yearReleased": "2010",
-          "duration": "2h 26m",
-          "format": "DVD"
-        }
-      ]; 
+          title: "Harry Potter and the Deathly Hallows part 1",
+          rating: "PG-13",
+          yearReleased: "2010",
+          duration: "2h 26m",
+          format: "DVD",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: movieTest[0]
+        body: movieTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -140,7 +139,7 @@ describe("getAllMovies()", () => {
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(movieTest[0]);
     });
-      
+
     it("Responds with 401, 'Authentication failed.'", async () => {
       await moviesController.addMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(401);
@@ -150,29 +149,31 @@ describe("getAllMovies()", () => {
 
     it("Responds with 400, missing body", async () => {
       const req = {
-        user: "mockUser"
+        user: "mockUser",
       };
-      
+
       await moviesController.addMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a movie to add in the body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a movie to add in the body."
+      );
     });
 
     it("Responds with 400, missing field", async () => {
       const movieTest = [
         {
-          "rating": "PG-13",
-          "yearReleased": "2010",
-          "duration": "2h 26m",
-          "format": "DVD"
-        }
-      ]; 
+          rating: "PG-13",
+          yearReleased: "2010",
+          duration: "2h 26m",
+          format: "DVD",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: movieTest[0]
+        body: movieTest[0],
       };
-      
+
       await moviesController.addMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith("Missing field error: title");
@@ -181,17 +182,17 @@ describe("getAllMovies()", () => {
     it("Fails to add to movie to DB", async () => {
       const movieTest = [
         {
-          "title": "Harry Potter and the Deathly Hallows part 1",
-          "rating": "PG-13",
-          "yearReleased": "2010",
-          "duration": "2h 26m",
-          "format": "DVD"
-        }
-      ]; 
+          title: "Harry Potter and the Deathly Hallows part 1",
+          rating: "PG-13",
+          yearReleased: "2010",
+          duration: "2h 26m",
+          format: "DVD",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: movieTest[0]
+        body: movieTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -203,21 +204,19 @@ describe("getAllMovies()", () => {
 
       await moviesController.addMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error adding movie."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error adding movie.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
       const movieTest = [
         {
-          "title": "Harry Potter and the Deathly Hallows part 1",
-          "rating": "PG-13",
-          "yearReleased": "2010",
-          "duration": "2h 26m",
-          "format": "DVD"
-        }
-      ]; 
+          title: "Harry Potter and the Deathly Hallows part 1",
+          rating: "PG-13",
+          yearReleased: "2010",
+          duration: "2h 26m",
+          format: "DVD",
+        },
+      ];
       const req = {
         user: "mockUser",
         body: movieTest[0],
@@ -236,20 +235,20 @@ describe("getAllMovies()", () => {
     it("changes some info and saves it", async () => {
       const movieTest = [
         {
-          "title": "Colton Kramer and the Deathly Finals part 1",
-          "rating": "PG-13",
-          "yearReleased": "2010",
-          "duration": "2h 26m",
-          "format": "In-person"
-        }
+          title: "Colton Kramer and the Deathly Finals part 1",
+          rating: "PG-13",
+          yearReleased: "2010",
+          duration: "2h 26m",
+          format: "In-person",
+        },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: movieTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: movieTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
@@ -282,41 +281,45 @@ describe("getAllMovies()", () => {
     it("Responds with 400, missing body", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
       };
       await moviesController.updateMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a body."
+      );
     });
 
     it("Responds with 400, missing fields", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: {}
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: {},
       };
       await moviesController.updateMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title,rating,yearReleased,duration,format");
+      expect(res.send).toHaveBeenCalledWith(
+        "Missing field error: title,rating,yearReleased,duration,format"
+      );
     });
 
     it("Fails to add to field to Movie", async () => {
       const movieTest = [
         {
-          "title": "Colton Kramer and the Deathly Finals part 1",
-          "rating": "PG-13",
-          "yearReleased": "2010",
-          "duration": "2h 26m",
-          "format": "In-person"
-        }
+          title: "Colton Kramer and the Deathly Finals part 1",
+          rating: "PG-13",
+          yearReleased: "2010",
+          duration: "2h 26m",
+          format: "In-person",
+        },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: movieTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: movieTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: false,
@@ -326,40 +329,39 @@ describe("getAllMovies()", () => {
 
       await moviesController.updateMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error updating movie."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error updating movie.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
       const movieTest = [
         {
-          "title": "Colton Kramer and the Deathly Finals part 1",
-          "rating": "PG-13",
-          "yearReleased": "2010",
-          "duration": "2h 26m",
-          "format": "In-person"
-        }
+          title: "Colton Kramer and the Deathly Finals part 1",
+          rating: "PG-13",
+          yearReleased: "2010",
+          duration: "2h 26m",
+          format: "In-person",
+        },
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: movieTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: movieTest[0],
       };
       const res = mockResponse();
 
       await moviesController.updateMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while getting this movie");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while getting this movie"
+      );
     });
   });
 
   describe("Deletes the movie", () => {
     it("Removes the movie we added earler from the database", async () => {
-
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: movieTest[0]
       };
 
@@ -384,7 +386,7 @@ describe("getAllMovies()", () => {
     it("Responds with 400, Delete fails", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: movieTest[0]
       };
 
@@ -411,15 +413,17 @@ describe("getAllMovies()", () => {
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: movieTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: movieTest[0],
       };
 
       const res = mockResponse();
 
       await moviesController.deleteMovie(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while deleting this movie");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while deleting this movie"
+      );
     });
   });
 });

@@ -41,14 +41,14 @@ describe("getAllMusic()", () => {
 
       const musicOne = [
         {
-          "artist": "Queen",
-          "album": "Sheer Heart Attack",
-          "label": "Elektra Music",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
+          artist: "Queen",
+          album: "Sheer Heart Attack",
+          label: "Elektra Music",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
       ];
 
       mongodb.getCollection = jest.fn(() => ({
@@ -114,23 +114,22 @@ describe("getAllMusic()", () => {
   });
 
   describe("Add new music", () => {
-
     it("Adds music and return successful code", async () => {
       const musicTest = [
         {
-          "artist": "Queen",
-          "album": "Sheer Heart Attack",
-          "label": "Elektra Music",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
-      ]; 
+          artist: "Queen",
+          album: "Sheer Heart Attack",
+          label: "Elektra Music",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: musicTest[0]
+        body: musicTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -144,7 +143,7 @@ describe("getAllMusic()", () => {
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(musicTest[0]);
     });
-      
+
     it("Responds with 401, 'Authentication failed.'", async () => {
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(401);
@@ -154,31 +153,33 @@ describe("getAllMusic()", () => {
 
     it("Responds with 400, missing body", async () => {
       const req = {
-        user: "mockUser"
+        user: "mockUser",
       };
-      
+
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a music to add in the body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a music to add in the body."
+      );
     });
 
     it("Responds with 400, missing field", async () => {
       const musicTest = [
         {
-          "album": "Sheer Heart Attack",
-          "label": "Elektra Music",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
-      ]; 
+          album: "Sheer Heart Attack",
+          label: "Elektra Music",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: musicTest[0]
+        body: musicTest[0],
       };
-      
+
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith("Missing field error: artist");
@@ -187,19 +188,19 @@ describe("getAllMusic()", () => {
     it("Fails to add to music to DB", async () => {
       const musicTest = [
         {
-          "artist": "Queen",
-          "album": "Sheer Heart Attack",
-          "label": "Elektra Music",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
-      ]; 
+          artist: "Queen",
+          album: "Sheer Heart Attack",
+          label: "Elektra Music",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
+      ];
 
       const req = {
         user: "mockUser",
-        body: musicTest[0]
+        body: musicTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -211,23 +212,21 @@ describe("getAllMusic()", () => {
 
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error adding music."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error adding music.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
       const musicTest = [
         {
-          "artist": "Queen",
-          "album": "Sheer Heart Attack",
-          "label": "Elektra Music",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
-      ]; 
+          artist: "Queen",
+          album: "Sheer Heart Attack",
+          label: "Elektra Music",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
+      ];
       const req = {
         user: "mockUser",
         body: musicTest[0],
@@ -246,22 +245,22 @@ describe("getAllMusic()", () => {
     it("changes some info and saves it", async () => {
       const musicTest = [
         {
-          "artist": "Jesse",
-          "album": "Sheer Exam Attack",
-          "label": "Extreme Records",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
+          artist: "Jesse",
+          album: "Sheer Exam Attack",
+          label: "Extreme Records",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: musicTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: musicTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
@@ -294,43 +293,47 @@ describe("getAllMusic()", () => {
     it("Responds with 400, missing body", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
       };
       await musicController.updateMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a body."
+      );
     });
 
     it("Responds with 400, missing fields", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: {}
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: {},
       };
       await musicController.updateMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: artist,album,label,genre,releaseDate,numSongs,format");
+      expect(res.send).toHaveBeenCalledWith(
+        "Missing field error: artist,album,label,genre,releaseDate,numSongs,format"
+      );
     });
 
     it("Fails to add to field to Music", async () => {
       const musicTest = [
         {
-          "artist": "Jesse",
-          "album": "Sheer Exam Attack",
-          "label": "Extreme Records",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
+          artist: "Jesse",
+          album: "Sheer Exam Attack",
+          label: "Extreme Records",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: musicTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: musicTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: false,
@@ -340,42 +343,41 @@ describe("getAllMusic()", () => {
 
       await musicController.updateMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error updating music."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error updating music.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
       const musicTest = [
         {
-          "artist": "Jesse",
-          "album": "Sheer Exam Attack",
-          "label": "Extreme Records",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
+          artist: "Jesse",
+          album: "Sheer Exam Attack",
+          label: "Extreme Records",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: musicTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: musicTest[0],
       };
       const res = mockResponse();
 
       await musicController.updateMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while getting this music");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while getting this music"
+      );
     });
   });
 
   describe("Deletes the music", () => {
     it("Removes the music we added earler from the database", async () => {
-
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: musicTest[0]
       };
 
@@ -400,7 +402,7 @@ describe("getAllMusic()", () => {
     it("Responds with 400, Delete fails", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: musicTest[0]
       };
 
@@ -419,26 +421,28 @@ describe("getAllMusic()", () => {
     it("Responds with 500, the DB is not initialized", async () => {
       const musicTest = [
         {
-          "artist": "Jesse",
-          "album": "Sheer Exam Attack",
-          "label": "Extreme Records",
-          "genre": "Rock",
-          "releaseDate": "11/08/1974",
-          "numSongs": "13",
-          "format": "CD"
-        }
+          artist: "Jesse",
+          album: "Sheer Exam Attack",
+          label: "Extreme Records",
+          genre: "Rock",
+          releaseDate: "11/08/1974",
+          numSongs: "13",
+          format: "CD",
+        },
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: musicTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: musicTest[0],
       };
 
       const res = mockResponse();
 
       await musicController.deleteMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while deleting this music");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while deleting this music"
+      );
     });
   });
 });

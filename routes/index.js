@@ -10,11 +10,6 @@ const games = require("./games");
 
 router.use(openCors);
 
-// router.use("/", require("./books"));
-// router.use("/books", require("./books"));
-// router.use("/movies", require("./movies"));
-// router.use("/music", require("./music"));
-// router.use("/games", require("./games"));
 router.use("/api-docs", require("./docs"));
 router.use("/authorization", authorizationRoutes);
 router.use("/api/v1/books", loadUser, books);

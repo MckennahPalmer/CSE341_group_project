@@ -29,10 +29,10 @@ const getBookById = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send("Missing book id.");
     return;
-  } 
+  }
   const bookId = new ObjectId(req.params.id);
 
-  try {  
+  try {
     const response = await mongodb.getCollection("books").find({ _id: bookId });
     if (!response) {
       res.status(400).send("No book returned for that id.");
@@ -45,7 +45,7 @@ const getBookById = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this book"
+    const msg = "An error occurred while getting this book";
     res.send(msg);
     return;
   }
@@ -57,9 +57,11 @@ const addBook = async (req, res) => {
     res.send("Authentication failed.");
     return;
   }
-  
+
   if (!req.body) {
-    res.status(400).send(`Invalid request, please provide a book to add in the body.`);
+    res
+      .status(400)
+      .send(`Invalid request, please provide a book to add in the body.`);
     return;
   }
 
@@ -78,7 +80,7 @@ const addBook = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this book"
+    const msg = "An error occurred while getting this book";
     res.send(msg);
     return;
   }
@@ -93,7 +95,7 @@ const updateBook = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send("Missing param book id.");
     return;
-  } 
+  }
 
   if (!req.body) {
     res.status(400).send(`Invalid request, please provide a body.`);
@@ -104,7 +106,9 @@ const updateBook = async (req, res) => {
   const book = validateFields(req, res);
 
   try {
-    const response = await mongodb.getCollection("books").replaceOne({ _id: bookId }, book);
+    const response = await mongodb
+      .getCollection("books")
+      .replaceOne({ _id: bookId }, book);
     if (response.acknowledged) {
       response.toArray().then((lists) => {
         res.setHeader("Content-Type", "application/json");
@@ -116,7 +120,7 @@ const updateBook = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this book"
+    const msg = "An error occurred while getting this book";
     res.send(msg);
     return;
   }
@@ -145,7 +149,9 @@ const deleteBook = async (req, res) => {
   // }
 
   try {
-    const response = await mongodb.getCollection("books").deleteOne({ _id: bookId }, true);
+    const response = await mongodb
+      .getCollection("books")
+      .deleteOne({ _id: bookId }, true);
     if (response.acknowledged) {
       //res.setHeader("Content-Type", "application/json");
       res.status(204); //no content
@@ -155,7 +161,7 @@ const deleteBook = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while deleting this book"
+    const msg = "An error occurred while deleting this book";
     res.send(msg);
     return;
   }
@@ -172,7 +178,9 @@ module.exports = {
 function validateFields(req, res) {
   let book;
   const validFields = ["title", "author", "yearPublished", "format"];
-  const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
+  const missingFields = validFields.filter(
+    (val) => !Object.keys(req.body).includes(val) || req.body[val] === ""
+  );
   if (missingFields.length > 0) {
     res.status(400).send(`Missing field error: ${missingFields}`);
     return;

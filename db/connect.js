@@ -35,5 +35,5 @@ const getCollection = (collection) => {
 
 module.exports = {
   initDb,
-  getCollection
+  getCollection,
 };

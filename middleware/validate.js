@@ -43,8 +43,8 @@ const saveMusic = (req, res, next) => {
     genre: "required|string",
     releaseDate: "required|string",
     numSongs: "required|string",
-    format: "required|string"
-    };
+    format: "required|string",
+  };
   validationHelper(req, res, next, validationRule);
 };
 
@@ -58,8 +58,6 @@ const saveGame = (req, res, next) => {
   };
   validationHelper(req, res, next, validationRule);
 };
-
-
 
 module.exports = {
   saveBook,

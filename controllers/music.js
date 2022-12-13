@@ -30,11 +30,13 @@ const getMusicById = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send("Missing music id.");
     return;
-  } 
+  }
   const musicId = new ObjectId(req.params.id);
 
-  try {  
-    const response = await mongodb.getCollection("music").find({ _id: musicId });
+  try {
+    const response = await mongodb
+      .getCollection("music")
+      .find({ _id: musicId });
     if (!response) {
       res.status(400).send("No music returned for that id.");
       return;
@@ -46,7 +48,7 @@ const getMusicById = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this music"
+    const msg = "An error occurred while getting this music";
     res.send(msg);
     return;
   }
@@ -58,9 +60,11 @@ const addMusic = async (req, res) => {
     res.send("Authentication failed.");
     return;
   }
-  
+
   if (!req.body) {
-    res.status(400).send(`Invalid request, please provide a music to add in the body.`);
+    res
+      .status(400)
+      .send(`Invalid request, please provide a music to add in the body.`);
     return;
   }
 
@@ -79,7 +83,7 @@ const addMusic = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this music"
+    const msg = "An error occurred while getting this music";
     res.send(msg);
     return;
   }
@@ -94,7 +98,7 @@ const updateMusic = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send("Missing param music id.");
     return;
-  } 
+  }
 
   if (!req.body) {
     res.status(400).send(`Invalid request, please provide a body.`);
@@ -105,7 +109,9 @@ const updateMusic = async (req, res) => {
   const music = validateFields(req, res);
 
   try {
-    const response = await mongodb.getCollection("music").replaceOne({ _id: musicId }, music);
+    const response = await mongodb
+      .getCollection("music")
+      .replaceOne({ _id: musicId }, music);
     if (response.acknowledged) {
       response.toArray().then((lists) => {
         res.setHeader("Content-Type", "application/json");
@@ -117,7 +123,7 @@ const updateMusic = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this music"
+    const msg = "An error occurred while getting this music";
     res.send(msg);
     return;
   }
@@ -146,7 +152,9 @@ const deleteMusic = async (req, res) => {
   // }
 
   try {
-    const response = await mongodb.getCollection("music").deleteOne({ _id: musicId }, true);
+    const response = await mongodb
+      .getCollection("music")
+      .deleteOne({ _id: musicId }, true);
     if (response.acknowledged) {
       //res.setHeader("Content-Type", "application/json");
       res.status(204); //no content
@@ -156,7 +164,7 @@ const deleteMusic = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while deleting this music"
+    const msg = "An error occurred while deleting this music";
     res.send(msg);
     return;
   }
@@ -172,8 +180,18 @@ module.exports = {
 
 function validateFields(req, res) {
   let music;
-  const validFields = ["artist", "album", "label", "genre", "releaseDate", "numSongs", "format"];
-  const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
+  const validFields = [
+    "artist",
+    "album",
+    "label",
+    "genre",
+    "releaseDate",
+    "numSongs",
+    "format",
+  ];
+  const missingFields = validFields.filter(
+    (val) => !Object.keys(req.body).includes(val) || req.body[val] === ""
+  );
   if (missingFields.length > 0) {
     res.status(400).send(`Missing field error: ${missingFields}`);
     return;
@@ -185,7 +203,7 @@ function validateFields(req, res) {
       genre: req.body.genre,
       releaseDate: req.body.releaseDate,
       numSongs: req.body.numSongs,
-      format: req.body.format
+      format: req.body.format,
     };
   }
   return music;

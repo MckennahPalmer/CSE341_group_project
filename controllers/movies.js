@@ -29,11 +29,13 @@ const getMovieById = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send("Missing movie id.");
     return;
-  } 
+  }
   const movieId = new ObjectId(req.params.id);
 
-  try {  
-    const response = await mongodb.getCollection("movies").find({ _id: movieId });
+  try {
+    const response = await mongodb
+      .getCollection("movies")
+      .find({ _id: movieId });
     if (!response) {
       res.status(400).send("No movie returned for that id.");
       return;
@@ -45,7 +47,7 @@ const getMovieById = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this movie"
+    const msg = "An error occurred while getting this movie";
     res.send(msg);
     return;
   }
@@ -57,9 +59,11 @@ const addMovie = async (req, res) => {
     res.send("Authentication failed.");
     return;
   }
-  
+
   if (!req.body) {
-    res.status(400).send(`Invalid request, please provide a movie to add in the body.`);
+    res
+      .status(400)
+      .send(`Invalid request, please provide a movie to add in the body.`);
     return;
   }
 
@@ -78,7 +82,7 @@ const addMovie = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this movie"
+    const msg = "An error occurred while getting this movie";
     res.send(msg);
     return;
   }
@@ -93,7 +97,7 @@ const updateMovie = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send("Missing param movie id.");
     return;
-  } 
+  }
 
   if (!req.body) {
     res.status(400).send(`Invalid request, please provide a body.`);
@@ -104,7 +108,9 @@ const updateMovie = async (req, res) => {
   const movie = validateFields(req, res);
 
   try {
-    const response = await mongodb.getCollection("movies").replaceOne({ _id: movieId }, movie);
+    const response = await mongodb
+      .getCollection("movies")
+      .replaceOne({ _id: movieId }, movie);
     if (response.acknowledged) {
       response.toArray().then((lists) => {
         res.setHeader("Content-Type", "application/json");
@@ -116,7 +122,7 @@ const updateMovie = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this movie"
+    const msg = "An error occurred while getting this movie";
     res.send(msg);
     return;
   }
@@ -145,7 +151,9 @@ const deleteMovie = async (req, res) => {
   // }
 
   try {
-    const response = await mongodb.getCollection("movies").deleteOne({ _id: movieId }, true);
+    const response = await mongodb
+      .getCollection("movies")
+      .deleteOne({ _id: movieId }, true);
     if (response.acknowledged) {
       //res.setHeader("Content-Type", "application/json");
       res.status(204); //no content
@@ -155,7 +163,7 @@ const deleteMovie = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while deleting this movie"
+    const msg = "An error occurred while deleting this movie";
     res.send(msg);
     return;
   }
@@ -172,7 +180,9 @@ module.exports = {
 function validateFields(req, res) {
   let movie;
   const validFields = ["title", "rating", "yearReleased", "duration", "format"];
-  const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
+  const missingFields = validFields.filter(
+    (val) => !Object.keys(req.body).includes(val) || req.body[val] === ""
+  );
   if (missingFields.length > 0) {
     res.status(400).send(`Missing field error: ${missingFields}`);
     return;
@@ -182,7 +192,7 @@ function validateFields(req, res) {
       rating: req.body.rating,
       yearReleased: req.body.yearReleased,
       duration: req.body.duration,
-      format: req.body.format
+      format: req.body.format,
     };
   }
   return movie;

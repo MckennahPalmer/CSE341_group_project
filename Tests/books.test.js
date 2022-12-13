@@ -111,7 +111,6 @@ describe("getAllBooks()", () => {
   });
 
   describe("Add new book", () => {
-
     it("Adds book and return successful code", async () => {
       const bookTest = [
         {
@@ -120,11 +119,11 @@ describe("getAllBooks()", () => {
           yearPublished: "1954",
           format: "Paperback",
         },
-      ]; 
+      ];
 
       const req = {
         user: "mockUser",
-        body: bookTest[0]
+        body: bookTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -138,7 +137,7 @@ describe("getAllBooks()", () => {
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(bookTest[0]);
     });
-      
+
     it("Responds with 401, 'Authentication failed.'", async () => {
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(401);
@@ -148,12 +147,14 @@ describe("getAllBooks()", () => {
 
     it("Responds with 400, missing body", async () => {
       const req = {
-        user: "mockUser"
+        user: "mockUser",
       };
-      
+
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a book to add in the body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a book to add in the body."
+      );
     });
 
     it("Responds with 400, missing field", async () => {
@@ -163,13 +164,13 @@ describe("getAllBooks()", () => {
           yearPublished: "1954",
           format: "Paperback",
         },
-      ]; 
+      ];
 
       const req = {
         user: "mockUser",
-        body: bookTest[0]
+        body: bookTest[0],
       };
-      
+
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.send).toHaveBeenCalledWith("Missing field error: title");
@@ -183,11 +184,11 @@ describe("getAllBooks()", () => {
           yearPublished: "1954",
           format: "Paperback",
         },
-      ]; 
+      ];
 
       const req = {
         user: "mockUser",
-        body: bookTest[0]
+        body: bookTest[0],
       };
 
       mongodb.getCollection = jest.fn(() => ({
@@ -199,9 +200,7 @@ describe("getAllBooks()", () => {
 
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error adding book."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error adding book.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
@@ -212,7 +211,7 @@ describe("getAllBooks()", () => {
           yearPublished: "1954",
           format: "Paperback",
         },
-      ]; 
+      ];
       const req = {
         user: "mockUser",
         body: bookTest[0],
@@ -237,13 +236,13 @@ describe("getAllBooks()", () => {
           format: "AudioBook",
         },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: bookTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: bookTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: true,
@@ -276,22 +275,26 @@ describe("getAllBooks()", () => {
     it("Responds with 400, missing body", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
       };
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Invalid request, please provide a body.");
+      expect(res.send).toHaveBeenCalledWith(
+        "Invalid request, please provide a body."
+      );
     });
 
     it("Responds with 400, missing fields", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: {}
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: {},
       };
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith("Missing field error: title,author,yearPublished,format");
+      expect(res.send).toHaveBeenCalledWith(
+        "Missing field error: title,author,yearPublished,format"
+      );
     });
 
     it("Fails to add to field to Book", async () => {
@@ -303,13 +306,13 @@ describe("getAllBooks()", () => {
           format: "AudioBook",
         },
       ];
-  
+
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: bookTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: bookTest[0],
       };
-  
+
       mongodb.getCollection = jest.fn(() => ({
         replaceOne: jest.fn(() => ({
           acknowledged: false,
@@ -319,9 +322,7 @@ describe("getAllBooks()", () => {
 
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        "Unknown error updating book."
-      );
+      expect(res.send).toHaveBeenCalledWith("Unknown error updating book.");
     });
 
     it("Responds with 500, the DB is not initialized", async () => {
@@ -335,14 +336,16 @@ describe("getAllBooks()", () => {
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: bookTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: bookTest[0],
       };
       const res = mockResponse();
 
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while getting this book");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while getting this book"
+      );
     });
   });
 
@@ -355,11 +358,11 @@ describe("getAllBooks()", () => {
       //     yearPublished: "1954",
       //     format: "Paperback",
       //   },
-      // ]; 
+      // ];
 
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: bookTest[0]
       };
 
@@ -384,7 +387,7 @@ describe("getAllBooks()", () => {
     it("Responds with 400, Delete fails", async () => {
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
+        params: { id: "637ee05926a634d0f54729f8" },
         // body: bookTest[0]
       };
 
@@ -411,15 +414,17 @@ describe("getAllBooks()", () => {
       ];
       const req = {
         user: "mockUser",
-        params: {id: "637ee05926a634d0f54729f8"},
-        body: bookTest[0]
+        params: { id: "637ee05926a634d0f54729f8" },
+        body: bookTest[0],
       };
 
       const res = mockResponse();
 
       await booksController.deleteBook(req, res);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("An error occurred while deleting this book");
+      expect(res.send).toHaveBeenCalledWith(
+        "An error occurred while deleting this book"
+      );
     });
   });
 });

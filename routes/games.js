@@ -5,7 +5,6 @@ const gameController = require("../controllers/games");
 const loadUser = require("../middleware/loadUser");
 const validation = require("../middleware/validate");
 
-
 router.use([loadUser]);
 
 // Get all games

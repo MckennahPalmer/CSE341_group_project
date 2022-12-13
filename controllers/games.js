@@ -29,13 +29,13 @@ const getGameById = async (req, res) => {
     res.send("Authentication failed.");
     return;
   }
-    if (!req.params.id) {
+  if (!req.params.id) {
     res.status(400).send("Missing game id.");
     return;
   }
   const gameId = new ObjectId(req.params.id);
 
-  try {  
+  try {
     const response = await mongodb.getCollection("games").find({ _id: gameId });
     if (!response) {
       res.status(400).send("No game returned for that id.");
@@ -48,7 +48,7 @@ const getGameById = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this game"
+    const msg = "An error occurred while getting this game";
     res.send(msg);
     return;
   }
@@ -60,9 +60,11 @@ const addGame = async (req, res) => {
     res.send("Authentication failed.");
     return;
   }
-  
+
   if (!req.body) {
-    res.status(400).send(`Invalid request, please provide a game to add in the body.`);
+    res
+      .status(400)
+      .send(`Invalid request, please provide a game to add in the body.`);
     return;
   }
 
@@ -81,7 +83,7 @@ const addGame = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this game"
+    const msg = "An error occurred while getting this game";
     res.send(msg);
     return;
   }
@@ -96,7 +98,7 @@ const updateGame = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send("Missing param game id.");
     return;
-  } 
+  }
 
   if (!req.body) {
     res.status(400).send(`Invalid request, please provide a body.`);
@@ -107,7 +109,9 @@ const updateGame = async (req, res) => {
   const game = validateFields(req, res);
 
   try {
-    const response = await mongodb.getCollection("games").replaceOne({ _id: gameId }, game);
+    const response = await mongodb
+      .getCollection("games")
+      .replaceOne({ _id: gameId }, game);
     if (response.acknowledged) {
       response.toArray().then((lists) => {
         res.setHeader("Content-Type", "application/json");
@@ -119,7 +123,7 @@ const updateGame = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while getting this game"
+    const msg = "An error occurred while getting this game";
     res.send(msg);
     return;
   }
@@ -135,7 +139,9 @@ const deleteGame = async (req, res) => {
   const gameId = new ObjectId(req.params.id);
 
   try {
-    const response = await mongodb.getCollection("games").deleteOne({ _id: gameId }, true);
+    const response = await mongodb
+      .getCollection("games")
+      .deleteOne({ _id: gameId }, true);
     if (response.acknowledged) {
       //res.setHeader("Content-Type", "application/json");
       res.status(204); //no content
@@ -145,7 +151,7 @@ const deleteGame = async (req, res) => {
     }
   } catch (error) {
     res.status(500);
-    const msg = "An error occurred while deleting this Game"
+    const msg = "An error occurred while deleting this Game";
     res.send(msg);
     return;
   }
@@ -161,8 +167,16 @@ module.exports = {
 
 function validateFields(req, res) {
   let game;
-  const validFields = ["title", "developer", "publisher", "releaseDate", "platform"];
-  const missingFields = validFields.filter(val => !Object.keys(req.body).includes(val) || req.body[val] === '');
+  const validFields = [
+    "title",
+    "developer",
+    "publisher",
+    "releaseDate",
+    "platform",
+  ];
+  const missingFields = validFields.filter(
+    (val) => !Object.keys(req.body).includes(val) || req.body[val] === ""
+  );
   if (missingFields.length > 0) {
     res.status(400).send(`Missing field error: ${missingFields}`);
     return;
@@ -172,7 +186,7 @@ function validateFields(req, res) {
       developer: req.body.developer,
       publisher: req.body.publisher,
       releaseDate: req.body.releaseDate,
-      platform: req.body.platform
+      platform: req.body.platform,
     };
   }
   return game;

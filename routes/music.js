@@ -5,7 +5,6 @@ const musicController = require("../controllers/music");
 const loadUser = require("../middleware/loadUser");
 const validation = require("../middleware/validate");
 
-
 router.use([loadUser]);
 
 // Get all music
