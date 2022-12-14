@@ -79,7 +79,7 @@ const addMovie = async (req, res) => {
     const response = await mongodb.getCollection("movies").insertOne(movie);
     if (response.acknowledged) {
       res.setHeader("Content-Type", "application/json");
-      res.status(201).json({id: response.insertedId});
+      res.status(201).json({ id: response.insertedId });
     } else {
       res.status(400).send("Unknown error adding movie.");
       return;
@@ -124,7 +124,7 @@ const updateMovie = async (req, res) => {
       .replaceOne({ _id: movieId }, movie);
     if (response.acknowledged) {
       res.setHeader("Content-Type", "application/json");
-      res.status(200).json({id: req.params.id});
+      res.status(200).json({ id: req.params.id });
     } else {
       res.status(400).send("Unknown error updating movie.");
       return;
@@ -151,7 +151,7 @@ const deleteMovie = async (req, res) => {
       .getCollection("movies")
       .deleteOne({ _id: movieId }, true);
     if (response.acknowledged) {
-      res.status(204).send(""); //no content
+      res.status(200).json(response);
       return;
     } else {
       res.status(400).send("Unknown error deleting movie.");

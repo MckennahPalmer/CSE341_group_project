@@ -152,7 +152,7 @@ const deleteGame = async (req, res) => {
       .getCollection("games")
       .deleteOne({ _id: gameId }, true);
     if (response.acknowledged) {
-      res.status(204).send("").send(""); //no content
+      res.status(200).json(response);
       return;
     } else {
       res.status(400).send("Unknown error deleting game.");

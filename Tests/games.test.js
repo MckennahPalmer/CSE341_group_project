@@ -339,7 +339,7 @@ describe("getAllGames()", () => {
       }));
 
       await gamesController.deleteGame(req, res);
-      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {

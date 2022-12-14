@@ -135,13 +135,13 @@ describe("getAllMusic()", () => {
       mongodb.getCollection = jest.fn(() => ({
         insertOne: jest.fn(() => ({
           acknowledged: true,
-          insertedId: "123456789123"
+          insertedId: "123456789123",
         })),
       }));
 
       await musicController.addMusic(req, res);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({id: "123456789123"});
+      expect(res.json).toHaveBeenCalledWith({ id: "123456789123" });
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -353,7 +353,7 @@ describe("getAllMusic()", () => {
       }));
 
       await musicController.deleteMusic(req, res);
-      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {

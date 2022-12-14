@@ -129,13 +129,13 @@ describe("getAllBooks()", () => {
       mongodb.getCollection = jest.fn(() => ({
         insertOne: jest.fn(() => ({
           acknowledged: true,
-          insertedId: '123456789123', // return from mongo
+          insertedId: "123456789123", // return from mongo
         })),
       }));
 
       await booksController.addBook(req, res);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({id: '123456789123'});
+      expect(res.json).toHaveBeenCalledWith({ id: "123456789123" });
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -232,7 +232,7 @@ describe("getAllBooks()", () => {
 
       await booksController.updateBook(req, res);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({id: "637ee05926a634d0f54729f8"});
+      expect(res.json).toHaveBeenCalledWith({ id: "637ee05926a634d0f54729f8" });
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
@@ -341,7 +341,7 @@ describe("getAllBooks()", () => {
       }));
 
       await booksController.deleteBook(req, res);
-      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("Responds with 401, 'Authentication failed.'", async () => {
